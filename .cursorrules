@@ -1,0 +1,289 @@
+# Encrypt-D Project Rules
+
+## Language Standards
+
+### Code Language: English
+
+- All code MUST be written in English
+- Variable names, function names, class names: English only
+- Comments and docstrings: English only
+- Code documentation: English only
+
+### UI Language: Multi-language (English/Spanish)
+
+- User interface must support multiple languages
+- Use i18n (internationalization) system
+- Default language: English
+- Supported languages: English (en), Spanish (es)
+- All user-facing strings must be translatable
+
+## Code Style
+
+### Python Style Guide
+
+- Follow PEP 8 conventions
+- Use type hints where appropriate
+- Maximum line length: 88 characters (Black formatter standard)
+- Use double quotes for strings
+- Use descriptive variable names in English
+
+### Documentation
+
+- All functions must have English docstrings
+- Use Google-style docstring format:
+
+  ```python
+  def function_name(param1: type, param2: type) -> return_type:
+      """Brief description in English.
+
+      Args:
+          param1: Description of param1
+          param2: Description of param2
+
+      Returns:
+          Description of return value
+      """
+  ```
+
+### Naming Conventions
+
+- Classes: PascalCase (e.g., `CryptoManager`, `AuthManager`)
+- Functions/Methods: snake_case (e.g., `encrypt_folder`, `verify_password`)
+- Constants: UPPER_SNAKE_CASE (e.g., `MAX_LOGIN_ATTEMPTS`, `VAULT_DIR`)
+- Private methods: prefix with underscore (e.g., `_load_metadata`)
+
+## Internationalization (i18n)
+
+### String Management
+
+- Never hardcode user-facing strings in code
+- Use translation keys from language files
+- Format: `translator.get("key_name")`
+- Keep translation keys descriptive and organized
+
+### Translation Files
+
+- Location: `/i18n/` directory
+- Format: JSON files
+- Naming: `en.json`, `es.json`
+- Structure: Nested objects for organization
+
+### Adding New Strings
+
+1. Add English key to `en.json`
+2. Add Spanish translation to `es.json`
+3. Use in code via translator
+
+## Security Standards
+
+### Cryptography
+
+- Use industry-standard algorithms (AES-256-GCM)
+- Never implement custom crypto algorithms
+- Use proven libraries (cryptography package)
+- Always use secure random generators (secrets module)
+
+### Password Handling
+
+- Hash with PBKDF2-SHA256
+- Minimum 100,000 iterations
+- Use unique salt per password
+- Never log or display passwords
+
+## Project Structure
+
+### Module Organization
+
+```
+encrypt-d/
+├── config.py          # Configuration constants
+├── crypto_manager.py  # Encryption/decryption logic
+├── auth_manager.py    # Authentication logic
+├── gui.py            # User interface
+├── main.py           # Entry point
+├── i18n.py           # Internationalization system
+└── i18n/             # Translation files
+    ├── en.json       # English translations
+    └── es.json       # Spanish translations
+```
+
+### Import Order
+
+1. Standard library imports
+2. Third-party imports
+3. Local application imports
+
+## GUI Standards
+
+### User Messages
+
+- All messages through translation system
+- Use consistent terminology
+- Provide clear error messages
+- Include context in confirmations
+
+### Accessibility
+
+- Clear, readable fonts
+- High contrast for readability
+- Intuitive navigation
+- Keyboard shortcuts support
+
+## Git Commit Messages
+
+### Format
+
+- Write in English
+- Use present tense ("Add feature" not "Added feature")
+- Be descriptive but concise
+- Reference issue numbers when applicable
+
+### Examples
+
+- ✅ "Add multi-language support for GUI"
+- ✅ "Fix encryption bug with special characters"
+- ✅ "Improve error handling in auth manager"
+- ❌ "Updated code"
+- ❌ "Fix bug"
+
+## Testing
+
+### Test Requirements
+
+- Write tests in English
+- Test all critical paths
+- Include edge cases
+- Test both languages in UI tests
+
+## Comments
+
+### When to Comment
+
+- Complex algorithms: Explain the logic
+- Security-critical code: Explain why it's secure
+- Workarounds: Explain why needed
+- TODOs: What needs to be done
+
+### When NOT to Comment
+
+- Obvious code (don't state the obvious)
+- Self-documenting code
+- Redundant information
+
+### Comment Style
+
+```python
+# Good: Explains WHY
+# Use GCM mode for authenticated encryption to prevent tampering
+
+# Bad: States WHAT (obvious from code)
+# Create a new folder
+```
+
+## Error Handling
+
+### Always Handle Errors
+
+- Use try-except blocks for I/O operations
+- Provide user-friendly error messages (translated)
+- Log technical details for debugging
+- Never expose sensitive information in errors
+
+### Error Message Format
+
+```python
+try:
+    # operation
+except SpecificError as e:
+    return False, translator.get("error.specific_operation_failed")
+```
+
+## Performance
+
+### Optimization Guidelines
+
+- Optimize for readability first
+- Profile before optimizing
+- Use appropriate data structures
+- Avoid premature optimization
+
+## Scalability
+
+### Design Principles
+
+- Modular architecture
+- Loose coupling
+- High cohesion
+- Dependency injection where appropriate
+- Configuration over hardcoding
+
+## Version Control
+
+### Branch Strategy
+
+- `main`: Production-ready code
+- `develop`: Development branch
+- `feature/*`: New features
+- `fix/*`: Bug fixes
+
+### Files to Ignore
+
+- Virtual environments
+- `__pycache__/`
+- IDE-specific files
+- Build artifacts
+- User data/vault directories
+
+## Documentation Standards
+
+### README Files
+
+- Written in both English and Spanish
+- Clear installation instructions
+- Usage examples
+- Troubleshooting section
+
+### Code Documentation
+
+- English only
+- Keep up to date
+- Include examples for complex functions
+
+## Multi-language Implementation
+
+### Language Detection
+
+- Allow user to select language
+- Save preference
+- Default to system language or English
+
+### Translation Coverage
+
+- All UI strings
+- All user messages
+- All error messages
+- Help text and tooltips
+
+### Testing Translations
+
+- Verify all keys exist in all language files
+- Check for missing translations
+- Test UI with different languages
+- Ensure text fits in UI elements
+
+## Continuous Improvement
+
+### Code Review Checklist
+
+- [ ] Code in English
+- [ ] Comments in English
+- [ ] User strings translated
+- [ ] Follows naming conventions
+- [ ] Has appropriate error handling
+- [ ] Includes docstrings
+- [ ] Passes linting
+- [ ] No hardcoded secrets
+
+---
+
+**Remember**: Code speaks English, but the application speaks to users in their language.

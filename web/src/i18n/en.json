@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "features": "Features",
+    "security": "Security",
+    "download": "Download",
+    "docs": "Documentation",
+    "github": "GitHub"
+  },
+  "hero": {
+    "title": "Encrypt-D",
+    "subtitle": "Secure Folder Encryption for Windows",
+    "description": "Protect your sensitive data with military-grade AES-256-GCM encryption. Simple, secure, and powerful.",
+    "cta": {
+      "download": "Download for Windows",
+      "learnMore": "Learn More",
+      "version": "Version 1.0.0"
+    }
+  },
+  "features": {
+    "title": "Powerful Features",
+    "subtitle": "Everything you need to keep your data secure",
+    "items": {
+      "encryption": {
+        "title": "Military-Grade Encryption",
+        "description": "AES-256-GCM encryption standard ensures your data is protected with the highest level of security."
+      },
+      "autodestruct": {
+        "title": "Auto-Destruction",
+        "description": "After 3 failed password attempts, all data is automatically destroyed to prevent unauthorized access."
+      },
+      "hidden": {
+        "title": "Hidden Folders",
+        "description": "Encrypted folders are completely hidden from Windows Explorer with HIDDEN + SYSTEM attributes."
+      },
+      "multilang": {
+        "title": "Multi-Language Support",
+        "description": "Beautiful interface available in English and Spanish, with more languages coming soon."
+      },
+      "modular": {
+        "title": "Modular Architecture",
+        "description": "Clean, maintainable code following Screaming Architecture principles for easy extensibility."
+      },
+      "opensource": {
+        "title": "Open Source",
+        "description": "Fully transparent and auditable code. No backdoors, no hidden surprises."
+      }
+    }
+  },
+  "security": {
+    "title": "Bank-Level Security",
+    "subtitle": "Your data deserves the best protection",
+    "specs": {
+      "encryption": {
+        "title": "AES-256-GCM",
+        "description": "Military standard encryption"
+      },
+      "hashing": {
+        "title": "PBKDF2-SHA256",
+        "description": "100,000 iterations"
+      },
+      "protection": {
+        "title": "Brute Force Protection",
+        "description": "Limited login attempts"
+      },
+      "privacy": {
+        "title": "Complete Privacy",
+        "description": "No cloud, no tracking"
+      }
+    },
+    "features": [
+      "Unique salt per folder for maximum security",
+      "12-byte unique nonce per encrypted file",
+      "Master password protection with PBKDF2",
+      "Persistent failed attempt counter",
+      "Automatic lockout after maximum attempts",
+      "No password recovery - ultimate security"
+    ]
+  },
+  "howItWorks": {
+    "title": "How It Works",
+    "subtitle": "Simple steps to secure your data",
+    "steps": {
+      "1": {
+        "title": "Set Master Password",
+        "description": "Create a strong master password on first launch. This password protects all your encrypted folders."
+      },
+      "2": {
+        "title": "Add Folders",
+        "description": "Select folders you want to encrypt. Give them custom names and encrypt with a single click."
+      },
+      "3": {
+        "title": "Stay Secure",
+        "description": "Your folders are now encrypted and hidden. Decrypt them anytime with your master password."
+      }
+    }
+  },
+  "download": {
+    "title": "Get Encrypt-D",
+    "subtitle": "Start protecting your data today",
+    "requirements": {
+      "title": "System Requirements",
+      "items": [
+        "Windows 10/11",
+        "50 MB free disk space",
+        "No additional software needed"
+      ]
+    },
+    "options": {
+      "executable": {
+        "title": "Standalone Executable",
+        "description": "Ready to use, no installation required",
+        "size": "~25 MB",
+        "button": "Download .exe"
+      },
+      "source": {
+        "title": "Build from Source",
+        "description": "For developers who want to build it themselves",
+        "button": "View on GitHub"
+      }
+    }
+  },
+  "footer": {
+    "description": "Secure. Modular. International.",
+    "links": {
+      "documentation": "Documentation",
+      "contributing": "Contributing",
+      "license": "MIT License",
+      "github": "GitHub Repository"
+    },
+    "copyright": "Encrypt-D. Open source encryption for everyone."
+  }
+}

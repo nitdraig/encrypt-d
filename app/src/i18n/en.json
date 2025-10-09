@@ -1,0 +1,138 @@
+{
+  "app": {
+    "name": "Encrypt-D",
+    "version": "1.0.0",
+    "title": "Encrypt-D v{version}"
+  },
+  "language": {
+    "en": "English",
+    "es": "Español",
+    "select": "Select Language"
+  },
+  "setup": {
+    "welcome_title": "🔒 Welcome to Encrypt-D",
+    "welcome_subtitle": "Set up your master password to begin",
+    "password_label": "Password (minimum 6 characters):",
+    "confirm_label": "Confirm password:",
+    "warning_title": "⚠️  IMPORTANT:",
+    "warning_text": "• After {max_attempts} failed attempts,\n  all data will be destroyed\n• There is no way to recover the password\n• Keep your password in a safe place",
+    "button_continue": "Set Up and Continue",
+    "error_empty": "Please enter a password",
+    "error_mismatch": "Passwords do not match",
+    "success": "Password configured successfully"
+  },
+  "login": {
+    "title": "🔒 Encrypt-D",
+    "subtitle": "Enter your password to access",
+    "attempts_remaining": "Attempts remaining: {attempts}",
+    "password_label": "Password:",
+    "button_login": "Log In",
+    "error_empty": "Please enter the password",
+    "access_denied": "Access Denied"
+  },
+  "locked": {
+    "icon": "⚠️",
+    "title": "SYSTEM LOCKED",
+    "message": "The maximum number of attempts has been exceeded.\nAll data has been destroyed for security.\n\nYou can restart the application to set it up again.",
+    "button_reset": "Reset Application",
+    "confirm_title": "Confirm Reset",
+    "confirm_message": "Are you sure you want to reset the application?\nThis will delete ALL data and settings.",
+    "success": "Original folder deleted"
+  },
+  "main": {
+    "header_title": "🔒 Encrypt-D",
+    "button_change_password": "Change Password",
+    "button_logout": "Log Out",
+    "button_add_folder": "➕ Add Folder",
+    "button_decrypt": "🔓 Decrypt",
+    "button_delete": "🗑️ Delete",
+    "button_refresh": "🔄 Refresh",
+    "column_id": "ID",
+    "column_name": "Name",
+    "column_path": "Original Path",
+    "column_status": "Status",
+    "status_encrypted": "Encrypted",
+    "status_decrypted": "Decrypted",
+    "logout_confirm": "Do you want to log out?"
+  },
+  "folder": {
+    "select_encrypt": "Select folder to encrypt",
+    "select_decrypt": "Select location to decrypt",
+    "name_dialog_title": "Folder Name",
+    "name_dialog_label": "Name for this folder (optional):",
+    "button_encrypt": "Encrypt",
+    "confirm_encrypt_title": "Confirm",
+    "confirm_encrypt_message": "Do you want to encrypt the folder '{name}'?\n\nThe folder will be encrypted and securely stored.\nYou can decrypt it whenever you want.",
+    "delete_original_title": "Delete Original",
+    "delete_original_message": "Do you want to delete the original folder?\n\nYour data is safe in the encrypted vault.",
+    "select_warning": "Select a folder",
+    "not_found": "Folder not found",
+    "confirm_delete_title": "Confirm Deletion",
+    "confirm_delete_message": "Are you sure you want to delete '{name}'?\n\nThis action is PERMANENT and cannot be undone.\nAll encrypted data will be destroyed."
+  },
+  "password": {
+    "change_title": "Change Password",
+    "current_label": "Current password:",
+    "new_label": "New password:",
+    "confirm_label": "Confirm new password:",
+    "button_change": "Change Password",
+    "error_empty": "Fill in all fields",
+    "error_mismatch": "New passwords do not match",
+    "error_current_incorrect": "Current password incorrect. {message}",
+    "success": "Password changed successfully",
+    "min_length": "Password must be at least 6 characters"
+  },
+  "error": {
+    "title": "Error",
+    "folder_not_exist": "The folder does not exist",
+    "folder_not_directory": "The path is not a folder",
+    "encrypt_failed": "Error encrypting: {error}",
+    "decrypt_failed": "Error decrypting: {error}",
+    "wrong_password": "Incorrect password",
+    "encrypted_data_missing": "Encrypted data does not exist",
+    "delete_failed": "Error deleting: {error}",
+    "cannot_delete_original": "Could not delete: {error}"
+  },
+  "success": {
+    "title": "Success",
+    "folder_encrypted": "Folder encrypted successfully. ID: {id}",
+    "folder_decrypted": "Folder decrypted at: {path}",
+    "folder_deleted": "Folder permanently deleted"
+  },
+  "warning": {
+    "title": "Warning"
+  },
+  "attempts": {
+    "limit_exceeded": "ATTEMPT LIMIT EXCEEDED. System locked.",
+    "incorrect_password": "Incorrect password. Attempts remaining: {attempts}",
+    "access_granted": "Access granted",
+    "no_password_configured": "No password configured",
+    "system_locked": "System locked for security. All data has been destroyed."
+  },
+  "about": {
+    "title": "About Encrypt-D",
+    "version_label": "Version:",
+    "description": "Encrypt-D is a secure application for encrypting and protecting your sensitive folders with military-grade encryption (AES-256-GCM).",
+    "features_title": "✨ Features",
+    "features": [
+      "• AES-256-GCM encryption (military-grade security)",
+      "• Auto-destruction after multiple failed attempts",
+      "• Folders hidden from Windows search",
+      "• Master password with PBKDF2-HMAC-SHA256",
+      "• Complete folder structure preservation",
+      "• Multi-language support (English/Spanish)"
+    ],
+    "how_it_works_title": "🔧 How it Works",
+    "how_it_works": [
+      "1. Set up a master password to protect the application",
+      "2. Add folders you want to encrypt - they'll be secured in a hidden vault",
+      "3. Your folders are encrypted with AES-256-GCM using your password",
+      "4. Decrypt anytime with your password to restore full folder structure",
+      "5. Auto-destruction protects your data if someone tries to break in"
+    ],
+    "security_title": "🔒 Security",
+    "security_info": "Your data is encrypted with industry-standard AES-256-GCM. The master password is hashed using PBKDF2-HMAC-SHA256 with 100,000 iterations. After {max_attempts} failed login attempts, all encrypted data is permanently destroyed.",
+    "button_close": "Close",
+    "menu_item": "ℹ️ About"
+  }
+}

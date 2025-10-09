@@ -1,0 +1,138 @@
+{
+  "app": {
+    "name": "Encrypt-D",
+    "version": "1.0.0",
+    "title": "Encrypt-D v{version}"
+  },
+  "language": {
+    "en": "English",
+    "es": "Español",
+    "select": "Seleccionar Idioma"
+  },
+  "setup": {
+    "welcome_title": "🔒 Bienvenido a Encrypt-D",
+    "welcome_subtitle": "Configure su contraseña maestra para comenzar",
+    "password_label": "Contraseña (mínimo 6 caracteres):",
+    "confirm_label": "Confirmar contraseña:",
+    "warning_title": "⚠️  IMPORTANTE:",
+    "warning_text": "• Después de {max_attempts} intentos fallidos,\n  todos los datos serán destruidos\n• No hay forma de recuperar la contraseña\n• Guarde su contraseña en un lugar seguro",
+    "button_continue": "Configurar y Continuar",
+    "error_empty": "Ingrese una contraseña",
+    "error_mismatch": "Las contraseñas no coinciden",
+    "success": "Contraseña configurada correctamente"
+  },
+  "login": {
+    "title": "🔒 Encrypt-D",
+    "subtitle": "Ingrese su contraseña para acceder",
+    "attempts_remaining": "Intentos restantes: {attempts}",
+    "password_label": "Contraseña:",
+    "button_login": "Iniciar Sesión",
+    "error_empty": "Ingrese la contraseña",
+    "access_denied": "Acceso Denegado"
+  },
+  "locked": {
+    "icon": "⚠️",
+    "title": "SISTEMA BLOQUEADO",
+    "message": "Se excedió el número de intentos permitidos.\nTodos los datos han sido destruidos por seguridad.\n\nPuede reiniciar la aplicación para configurarla nuevamente.",
+    "button_reset": "Reiniciar Aplicación",
+    "confirm_title": "Confirmar Reset",
+    "confirm_message": "¿Está seguro de que desea reiniciar la aplicación?\nEsto eliminará TODOS los datos y configuraciones.",
+    "success": "Carpeta original eliminada"
+  },
+  "main": {
+    "header_title": "🔒 Encrypt-D",
+    "button_change_password": "Cambiar Contraseña",
+    "button_logout": "Cerrar Sesión",
+    "button_add_folder": "➕ Agregar Carpeta",
+    "button_decrypt": "🔓 Desencriptar",
+    "button_delete": "🗑️ Eliminar",
+    "button_refresh": "🔄 Actualizar",
+    "column_id": "ID",
+    "column_name": "Nombre",
+    "column_path": "Ruta Original",
+    "column_status": "Estado",
+    "status_encrypted": "Encriptada",
+    "status_decrypted": "Desencriptada",
+    "logout_confirm": "¿Desea cerrar la sesión?"
+  },
+  "folder": {
+    "select_encrypt": "Seleccionar carpeta para encriptar",
+    "select_decrypt": "Seleccionar ubicación para desencriptar",
+    "name_dialog_title": "Nombre de carpeta",
+    "name_dialog_label": "Nombre para esta carpeta (opcional):",
+    "button_encrypt": "Encriptar",
+    "confirm_encrypt_title": "Confirmar",
+    "confirm_encrypt_message": "¿Desea encriptar la carpeta '{name}'?\n\nLa carpeta será encriptada y guardada de forma segura.\nPodrá desencriptarla cuando lo desee.",
+    "delete_original_title": "Eliminar Original",
+    "delete_original_message": "¿Desea eliminar la carpeta original?\n\nSus datos están seguros en la bóveda encriptada.",
+    "select_warning": "Seleccione una carpeta",
+    "not_found": "Carpeta no encontrada",
+    "confirm_delete_title": "Confirmar Eliminación",
+    "confirm_delete_message": "¿Está seguro de que desea eliminar '{name}'?\n\nEsta acción es PERMANENTE y no se puede deshacer.\nTodos los datos encriptados serán destruidos."
+  },
+  "password": {
+    "change_title": "Cambiar Contraseña",
+    "current_label": "Contraseña actual:",
+    "new_label": "Nueva contraseña:",
+    "confirm_label": "Confirmar nueva contraseña:",
+    "button_change": "Cambiar Contraseña",
+    "error_empty": "Complete todos los campos",
+    "error_mismatch": "Las contraseñas nuevas no coinciden",
+    "error_current_incorrect": "Contraseña actual incorrecta. {message}",
+    "success": "Contraseña cambiada correctamente",
+    "min_length": "La contraseña debe tener al menos 6 caracteres"
+  },
+  "error": {
+    "title": "Error",
+    "folder_not_exist": "La carpeta no existe",
+    "folder_not_directory": "La ruta no es una carpeta",
+    "encrypt_failed": "Error al encriptar: {error}",
+    "decrypt_failed": "Error al desencriptar: {error}",
+    "wrong_password": "Contraseña incorrecta",
+    "encrypted_data_missing": "Los datos encriptados no existen",
+    "delete_failed": "Error al eliminar: {error}",
+    "cannot_delete_original": "No se pudo eliminar: {error}"
+  },
+  "success": {
+    "title": "Éxito",
+    "folder_encrypted": "Carpeta encriptada exitosamente. ID: {id}",
+    "folder_decrypted": "Carpeta desencriptada en: {path}",
+    "folder_deleted": "Carpeta eliminada permanentemente"
+  },
+  "warning": {
+    "title": "Advertencia"
+  },
+  "attempts": {
+    "limit_exceeded": "LÍMITE DE INTENTOS EXCEDIDO. Sistema bloqueado.",
+    "incorrect_password": "Contraseña incorrecta. Intentos restantes: {attempts}",
+    "access_granted": "Acceso concedido",
+    "no_password_configured": "No hay contraseña configurada",
+    "system_locked": "Sistema bloqueado por seguridad. Todos los datos han sido destruidos."
+  },
+  "about": {
+    "title": "Acerca de Encrypt-D",
+    "version_label": "Versión:",
+    "description": "Encrypt-D es una aplicación segura para encriptar y proteger tus carpetas sensibles con encriptación de grado militar (AES-256-GCM).",
+    "features_title": "✨ Características",
+    "features": [
+      "• Encriptación AES-256-GCM (seguridad de grado militar)",
+      "• Auto-destrucción tras múltiples intentos fallidos",
+      "• Carpetas ocultas del buscador de Windows",
+      "• Contraseña maestra con PBKDF2-HMAC-SHA256",
+      "• Preservación completa de estructura de carpetas",
+      "• Soporte multi-idioma (Inglés/Español)"
+    ],
+    "how_it_works_title": "🔧 Cómo Funciona",
+    "how_it_works": [
+      "1. Configura una contraseña maestra para proteger la aplicación",
+      "2. Agrega carpetas que quieras encriptar - se asegurarán en una bóveda oculta",
+      "3. Tus carpetas se encriptan con AES-256-GCM usando tu contraseña",
+      "4. Desencripta en cualquier momento con tu contraseña para restaurar la estructura completa",
+      "5. La auto-destrucción protege tus datos si alguien intenta romper la seguridad"
+    ],
+    "security_title": "🔒 Seguridad",
+    "security_info": "Tus datos están encriptados con el estándar de la industria AES-256-GCM. La contraseña maestra se hashea usando PBKDF2-HMAC-SHA256 con 100,000 iteraciones. Después de {max_attempts} intentos fallidos de inicio de sesión, todos los datos encriptados se destruyen permanentemente.",
+    "button_close": "Cerrar",
+    "menu_item": "ℹ️ Acerca de"
+  }
+}

@@ -1,0 +1,142 @@
+---
+interface Props {
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+---
+
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <div class="brand-header">
+        <span class="brand-icon">🔒</span>
+        <span class="brand-name">Encrypt-D</span>
+      </div>
+      <p class="brand-description">{t("footer.description")}</p>
+    </div>
+    <div class="footer-links">
+      <div class="link-column">
+        <h4 class="column-title">Product</h4>
+        <a href="#features" class="footer-link">{t("nav.features")}</a>
+        <a href="#security" class="footer-link">{t("nav.security")}</a>
+        <a href="#download" class="footer-link">{t("nav.download")}</a>
+      </div>
+      <div class="link-column">
+        <h4 class="column-title">Resources</h4>
+        <a href="#" class="footer-link">{t("footer.links.documentation")}</a>
+        <a href="#" class="footer-link">{t("footer.links.contributing")}</a>
+        <a
+          href="https://github.com/yourusername/encrypt-d"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-link">{t("footer.links.github")}</a
+        >
+      </div>
+      <div class="link-column">
+        <h4 class="column-title">Legal</h4>
+        <a href="#" class="footer-link">{t("footer.links.license")}</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <p class="copyright">{t("footer.copyright")}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-dark-light);
+    border-top: 1px solid rgba(59, 130, 246, 0.1);
+    padding: 4rem 0 0;
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 4rem;
+    padding-bottom: 3rem;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .brand-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .brand-icon {
+    font-size: 1.75rem;
+  }
+
+  .brand-name {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .brand-description {
+    color: var(--color-text-muted);
+    max-width: 300px;
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .link-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .column-title {
+    color: var(--color-text);
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-link {
+    color: var(--color-text-muted);
+    transition: color 0.3s ease;
+  }
+
+  .footer-link:hover {
+    color: var(--color-primary);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(59, 130, 246, 0.1);
+    padding: 2rem 0;
+  }
+
+  .copyright {
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .footer-links {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

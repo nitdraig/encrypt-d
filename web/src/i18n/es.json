@@ -1,0 +1,132 @@
+{
+  "nav": {
+    "features": "Características",
+    "security": "Seguridad",
+    "download": "Descargar",
+    "docs": "Documentación",
+    "github": "GitHub"
+  },
+  "hero": {
+    "title": "Encrypt-D",
+    "subtitle": "Encriptación Segura de Carpetas para Windows",
+    "description": "Protege tus datos sensibles con encriptación de grado militar AES-256-GCM. Simple, seguro y poderoso.",
+    "cta": {
+      "download": "Descargar para Windows",
+      "learnMore": "Conocer Más",
+      "version": "Versión 1.0.0"
+    }
+  },
+  "features": {
+    "title": "Características Poderosas",
+    "subtitle": "Todo lo que necesitas para mantener tus datos seguros",
+    "items": {
+      "encryption": {
+        "title": "Encriptación de Grado Militar",
+        "description": "El estándar de encriptación AES-256-GCM asegura que tus datos estén protegidos con el más alto nivel de seguridad."
+      },
+      "autodestruct": {
+        "title": "Auto-Destrucción",
+        "description": "Después de 3 intentos fallidos de contraseña, todos los datos son destruidos automáticamente para prevenir accesos no autorizados."
+      },
+      "hidden": {
+        "title": "Carpetas Ocultas",
+        "description": "Las carpetas encriptadas están completamente ocultas del Explorador de Windows con atributos HIDDEN + SYSTEM."
+      },
+      "multilang": {
+        "title": "Soporte Multi-Idioma",
+        "description": "Interfaz hermosa disponible en inglés y español, con más idiomas próximamente."
+      },
+      "modular": {
+        "title": "Arquitectura Modular",
+        "description": "Código limpio y mantenible siguiendo principios de Screaming Architecture para fácil extensibilidad."
+      },
+      "opensource": {
+        "title": "Código Abierto",
+        "description": "Código completamente transparente y auditable. Sin puertas traseras, sin sorpresas ocultas."
+      }
+    }
+  },
+  "security": {
+    "title": "Seguridad de Nivel Bancario",
+    "subtitle": "Tus datos merecen la mejor protección",
+    "specs": {
+      "encryption": {
+        "title": "AES-256-GCM",
+        "description": "Encriptación estándar militar"
+      },
+      "hashing": {
+        "title": "PBKDF2-SHA256",
+        "description": "100,000 iteraciones"
+      },
+      "protection": {
+        "title": "Protección Fuerza Bruta",
+        "description": "Intentos de login limitados"
+      },
+      "privacy": {
+        "title": "Privacidad Completa",
+        "description": "Sin nube, sin rastreo"
+      }
+    },
+    "features": [
+      "Salt único por carpeta para máxima seguridad",
+      "Nonce único de 12 bytes por archivo encriptado",
+      "Protección con contraseña maestra usando PBKDF2",
+      "Contador persistente de intentos fallidos",
+      "Bloqueo automático tras alcanzar intentos máximos",
+      "Sin recuperación de contraseña - máxima seguridad"
+    ]
+  },
+  "howItWorks": {
+    "title": "Cómo Funciona",
+    "subtitle": "Pasos simples para asegurar tus datos",
+    "steps": {
+      "1": {
+        "title": "Establecer Contraseña Maestra",
+        "description": "Crea una contraseña maestra fuerte en el primer inicio. Esta contraseña protege todas tus carpetas encriptadas."
+      },
+      "2": {
+        "title": "Agregar Carpetas",
+        "description": "Selecciona las carpetas que deseas encriptar. Dales nombres personalizados y encripta con un solo clic."
+      },
+      "3": {
+        "title": "Mantente Seguro",
+        "description": "Tus carpetas están ahora encriptadas y ocultas. Desencríptelas en cualquier momento con tu contraseña maestra."
+      }
+    }
+  },
+  "download": {
+    "title": "Obtén Encrypt-D",
+    "subtitle": "Comienza a proteger tus datos hoy",
+    "requirements": {
+      "title": "Requisitos del Sistema",
+      "items": [
+        "Windows 10/11",
+        "50 MB de espacio libre en disco",
+        "No se necesita software adicional"
+      ]
+    },
+    "options": {
+      "executable": {
+        "title": "Ejecutable Independiente",
+        "description": "Listo para usar, no requiere instalación",
+        "size": "~25 MB",
+        "button": "Descargar .exe"
+      },
+      "source": {
+        "title": "Compilar desde el Código",
+        "description": "Para desarrolladores que quieren compilarlo ellos mismos",
+        "button": "Ver en GitHub"
+      }
+    }
+  },
+  "footer": {
+    "description": "Seguro. Modular. Internacional.",
+    "links": {
+      "documentation": "Documentación",
+      "contributing": "Contribuir",
+      "license": "Licencia MIT",
+      "github": "Repositorio GitHub"
+    },
+    "copyright": "Encrypt-D. Encriptación de código abierto para todos."
+  }
+}

@@ -1,0 +1,152 @@
+---
+interface Props {
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+
+const features = [
+  {
+    icon: "🔐",
+    key: "encryption",
+  },
+  {
+    icon: "💣",
+    key: "autodestruct",
+  },
+  {
+    icon: "👁️",
+    key: "hidden",
+  },
+  {
+    icon: "🌍",
+    key: "multilang",
+  },
+  {
+    icon: "🧩",
+    key: "modular",
+  },
+  {
+    icon: "📖",
+    key: "opensource",
+  },
+];
+---
+
+<section id="features" class="section features">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">{t("features.title")}</h2>
+      <p class="section-subtitle">{t("features.subtitle")}</p>
+    </div>
+    <div class="features-grid">
+      {
+        features.map((feature) => (
+          <div class="feature-card">
+            <div class="feature-icon">{feature.icon}</div>
+            <h3 class="feature-title">
+              {t(`features.items.${feature.key}.title`)}
+            </h3>
+            <p class="feature-description">
+              {t(`features.items.${feature.key}.description`)}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .features {
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(59, 130, 246, 0.05) 100%
+    );
+  }
+
+  .section-header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 4rem;
+  }
+
+  .section-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-subtitle {
+    font-size: 1.25rem;
+    color: var(--color-text-muted);
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+
+  .feature-card {
+    background: var(--color-dark-light);
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    border-radius: 1rem;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .feature-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .feature-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--color-text);
+  }
+
+  .feature-description {
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2rem;
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,7 @@
+# Encrypt-D Dependencies
+cryptography==41.0.7  # Encryption/decryption (AES-256-GCM)
+pyinstaller==6.3.0    # Build executable (.exe)
+
+# Note: tkinter is included with Python
+# Note: i18n system is custom-built (no external dependencies)
+

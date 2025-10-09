@@ -1,0 +1,25 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navigation from "../components/Navigation.astro";
+import Hero from "../components/Hero.astro";
+import Features from "../components/Features.astro";
+import Security from "../components/Security.astro";
+import Download from "../components/Download.astro";
+import Footer from "../components/Footer.astro";
+import { useTranslations } from "../i18n/utils";
+
+const t = useTranslations("es");
+---
+
+<Layout
+  title="Encrypt-D - Encriptación Segura de Carpetas para Windows"
+  description="Protege tus datos sensibles con encriptación de grado militar AES-256-GCM. Encriptación de carpetas simple, segura y poderosa para Windows."
+  lang="es"
+>
+  <Navigation t={t} lang="es" />
+  <Hero t={t} />
+  <Features t={t} />
+  <Security t={t} />
+  <Download t={t} />
+  <Footer t={t} />
+</Layout>
