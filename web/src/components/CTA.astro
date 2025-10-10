@@ -1,0 +1,48 @@
+---
+import { Download } from "@lucide/astro";
+
+interface Props {
+  t: (key: string) => string;
+}
+
+const { t } = Astro.props;
+---
+
+<section id="download" class="container mx-auto px-4 py-20">
+  <div class="mx-auto max-w-4xl">
+    <div class="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 to-primary/5 p-12 text-center animate-scale-in">
+      <h2 class="mb-4 text-4xl font-bold tracking-tight md:text-5xl text-balance animate-fade-up">
+        {t("download.title")}
+      </h2>
+      <p class="mb-8 text-lg text-muted-foreground animate-fade-up" style="animation-delay: 0.1s; animation-fill-mode: both;">
+        {t("download.subtitle")}
+      </p>
+
+      <div class="flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-up" style="animation-delay: 0.2s; animation-fill-mode: both;">
+        <a 
+          href="https://github.com/nitdraig/encrypt-d/releases"
+          class="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105 hover:shadow-lg hover:shadow-primary/50"
+        >
+          <span class="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+          <Download class="h-5 w-5 group-hover:animate-bounce-subtle" />
+          {t("download.options.executable.button")}
+        </a>
+        <a 
+          href="https://github.com/nitdraig/encrypt-d"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group inline-flex items-center justify-center gap-2 rounded-md border border-border bg-transparent px-6 py-3 text-sm font-medium transition-all hover:bg-secondary hover:scale-105 hover:border-primary/50"
+        >
+          <svg class="h-5 w-5 group-hover:rotate-12 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+          </svg>
+          {t("download.options.source.button")}
+        </a>
+      </div>
+
+      <div class="mt-8 text-sm text-muted-foreground animate-fade-in" style="animation-delay: 0.3s; animation-fill-mode: both;">
+        {t("download.requirements.items.0")} • {t("download.requirements.items.1")}
+      </div>
+    </div>
+  </div>
+</section>

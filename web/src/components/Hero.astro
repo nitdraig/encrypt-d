@@ -1,4 +1,6 @@
 ---
+import { Download } from "@lucide/astro";
+
 interface Props {
   t: (key: string) => string;
 }
@@ -6,277 +8,46 @@ interface Props {
 const { t } = Astro.props;
 ---
 
-<section class="hero">
-  <div class="hero-background"></div>
-  <div class="container hero-content">
-    <div class="hero-text">
-      <h1 class="hero-title">
-        🔒 <span class="gradient-text">{t("hero.title")}</span>
-      </h1>
-      <p class="hero-subtitle">{t("hero.subtitle")}</p>
-      <p class="hero-description">{t("hero.description")}</p>
-      <div class="hero-actions">
-        <a href="#download" class="btn btn-primary">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
-          {t("hero.cta.download")}
-        </a>
-        <a href="#features" class="btn btn-secondary">
-          {t("hero.cta.learnMore")}
-        </a>
-      </div>
-      <p class="hero-version">{t("hero.cta.version")}</p>
+<section class="container mx-auto px-4 pt-32 pb-20">
+  <div class="mx-auto max-w-4xl text-center">
+    <div class="mb-6 inline-block animate-fade-down rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5">
+      <span class="font-mono text-sm text-primary">{t("hero.badge")}</span>
     </div>
-    <div class="hero-visual">
-      <div class="hero-card">
-        <div class="card-header">
-          <span class="card-icon">🔐</span>
-          <span class="card-title">AES-256-GCM</span>
-        </div>
-        <div class="card-content">
-          <div class="card-stat">
-            <span class="stat-value">256-bit</span>
-            <span class="stat-label">Encryption</span>
-          </div>
-          <div class="card-stat">
-            <span class="stat-value">100k</span>
-            <span class="stat-label">Iterations</span>
-          </div>
-          <div class="card-stat">
-            <span class="stat-value">3</span>
-            <span class="stat-label">Max Attempts</span>
-          </div>
-        </div>
+
+    <h1 class="mb-6 animate-fade-up font-sans text-5xl font-bold leading-tight tracking-tight text-balance md:text-7xl" style="animation-delay: 0.1s; animation-fill-mode: both;">
+      {t("hero.title")}
+    </h1>
+
+    <p class="mb-10 animate-fade-up text-lg text-muted-foreground text-pretty md:text-xl" style="animation-delay: 0.2s; animation-fill-mode: both;">
+      {t("hero.description")}
+    </p>
+
+    <div class="flex flex-col items-center justify-center gap-4 animate-fade-up sm:flex-row" style="animation-delay: 0.3s; animation-fill-mode: both;">
+      <a 
+        href="https://mega.nz/file/c5EWBazY#Kcn6mj_pAK9_BT15m9LkpRZ2ZFQjSQaG7Kvwc3fbp7E" 
+        download
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105 hover:shadow-lg hover:shadow-primary/50"
+      >
+        <span class="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+        <Download class="h-5 w-5 animate-bounce-subtle" />
+        {t("hero.cta.download")}
+      </a>
+      <a 
+        href="#features" 
+        class="inline-flex items-center justify-center gap-2 rounded-md border border-border bg-transparent px-6 py-3 text-sm font-medium transition-all hover:bg-secondary hover:scale-105 hover:border-primary/50"
+      >
+        {t("hero.cta.learnMore")}
+      </a>
+    </div>
+
+    <div class="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground animate-fade-in" style="animation-delay: 0.4s; animation-fill-mode: both;">
+      <div class="flex items-center gap-2">
+        <div class="h-2 w-2 rounded-full bg-primary animate-glow" />
+        <span>{t("hero.cta.version")}</span>
       </div>
     </div>
   </div>
 </section>
 
-<style>
-  .hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    padding: 2rem 0;
-  }
-
-  .hero-background {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-        circle at 20% 50%,
-        rgba(59, 130, 246, 0.15) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 80% 50%,
-        rgba(139, 92, 246, 0.15) 0%,
-        transparent 50%
-      );
-    z-index: 0;
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
-  }
-
-  .hero-title {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    line-height: 1.1;
-  }
-
-  .gradient-text {
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-subtitle {
-    font-size: 1.75rem;
-    color: var(--color-text);
-    margin-bottom: 1rem;
-    font-weight: 600;
-  }
-
-  .hero-description {
-    font-size: 1.125rem;
-    color: var(--color-text-muted);
-    margin-bottom: 2rem;
-    max-width: 500px;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
-    font-size: 1.125rem;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-  }
-
-  .btn-primary {
-    background: var(--gradient-primary);
-    color: white;
-    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
-  }
-
-  .btn-secondary {
-    background: transparent;
-    color: var(--color-text);
-    border-color: var(--color-text-muted);
-  }
-
-  .btn-secondary:hover {
-    background: var(--color-dark-light);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-  }
-
-  .hero-version {
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-  }
-
-  .hero-visual {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .hero-card {
-    background: linear-gradient(
-      135deg,
-      var(--color-dark-light) 0%,
-      #0f172a 100%
-    );
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    border-radius: 1.5rem;
-    padding: 2rem;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    animation: float 6s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-  }
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-  }
-
-  .card-icon {
-    font-size: 2rem;
-  }
-
-  .card-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .card-content {
-    display: grid;
-    gap: 1.5rem;
-  }
-
-  .card-stat {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--color-primary);
-  }
-
-  .stat-label {
-    font-size: 0.875rem;
-    color: var(--color-text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  @media (max-width: 768px) {
-    .hero-content {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
-
-    .hero-title {
-      font-size: 2.5rem;
-    }
-
-    .hero-subtitle {
-      font-size: 1.25rem;
-    }
-
-    .hero-actions {
-      flex-direction: column;
-    }
-
-    .btn {
-      width: 100%;
-      justify-content: center;
-    }
-
-    .hero-visual {
-      order: -1;
-    }
-
-    .hero-card {
-      width: 100%;
-    }
-  }
-</style>

@@ -1,171 +1,62 @@
 ---
+import { Shield, CircleCheck } from "@lucide/astro";
+
 interface Props {
   t: (key: string) => string;
 }
 
 const { t } = Astro.props;
-
-const specs = ["encryption", "hashing", "protection", "privacy"];
 ---
 
-<section id="security" class="section security">
-  <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">{t("security.title")}</h2>
-      <p class="section-subtitle">{t("security.subtitle")}</p>
-    </div>
-    <div class="security-content">
-      <div class="security-specs">
-        {
-          specs.map((spec) => (
-            <div class="spec-card">
-              <h3 class="spec-title">{t(`security.specs.${spec}.title`)}</h3>
-              <p class="spec-description">
-                {t(`security.specs.${spec}.description`)}
-              </p>
+<section id="security" class="container mx-auto px-4 py-20">
+  <div class="mx-auto max-w-6xl">
+    <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+      <div class="animate-slide-in-right">
+        <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5">
+          <Shield class="h-4 w-4 text-primary" />
+          <span class="font-mono text-sm text-primary">{t("security.title")}</span>
+        </div>
+
+        <h2 class="mb-6 text-4xl font-bold tracking-tight md:text-5xl text-balance">
+          {t("security.subtitle")}
+        </h2>
+
+        <p class="mb-8 text-lg text-muted-foreground leading-relaxed">
+          {t("features.items.encryption.description")}
+        </p>
+        <div class="grid gap-3">
+          {Array.from({ length: 6 }, (_, i) => (
+            <div class="flex items-center gap-3 animate-fade-in" style={`animation-delay: ${i * 0.1}s; animation-fill-mode: both;`}>
+              <CircleCheck class="h-5 w-5 flex-shrink-0 text-primary transition-transform hover:scale-110" />
+              <span class="text-foreground">{t(`security.features.${i}`)}</span>
             </div>
-          ))
-        }
+          ))}
+        </div>
       </div>
-      <div class="security-features">
-        <h3 class="features-title">🛡️ Security Features</h3>
-        <ul class="features-list">
-          {
-            Array.from({ length: 6 }, (_, i) => (
-              <li class="feature-item">
-                <svg
-                  class="check-icon"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span>{t(`security.features.${i}`)}</span>
-              </li>
-            ))
-          }
-        </ul>
+
+      <div class="rounded-lg border border-border/50 bg-card p-8 animate-scale-in" style="animation-delay: 0.2s; animation-fill-mode: both;">
+        <div class="space-y-6">
+          <div class="rounded-lg border border-primary/20 bg-primary/5 p-6 transition-all hover:scale-105 hover:border-primary/40">
+            <div class="mb-2 font-mono text-sm text-primary">{t("security.specs.encryption.description")}</div>
+            <div class="text-2xl font-bold">{t("security.specs.encryption.title")}</div>
+          </div>
+
+          <div class="rounded-lg border border-border/50 bg-secondary p-6 transition-all hover:scale-105 hover:border-primary/30">
+            <div class="mb-2 font-mono text-sm text-muted-foreground">{t("security.specs.hashing.description")}</div>
+            <div class="text-2xl font-bold">{t("security.specs.hashing.title")}</div>
+          </div>
+
+          <div class="rounded-lg border border-border/50 bg-secondary p-6 transition-all hover:scale-105 hover:border-primary/30">
+            <div class="mb-2 font-mono text-sm text-muted-foreground">{t("security.specs.protection.description")}</div>
+            <div class="text-2xl font-bold">{t("security.specs.protection.title")}</div>
+          </div>
+
+          <div class="rounded-lg border border-border/50 bg-secondary p-6 transition-all hover:scale-105 hover:border-primary/30">
+            <div class="mb-2 font-mono text-sm text-muted-foreground">{t("security.specs.privacy.description")}</div>
+            <div class="text-2xl font-bold">{t("security.specs.privacy.title")}</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
-
-<style>
-  .security {
-    background: var(--color-dark);
-  }
-
-  .section-header {
-    text-align: center;
-    max-width: 700px;
-    margin: 0 auto 4rem;
-  }
-
-  .section-title {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .section-subtitle {
-    font-size: 1.25rem;
-    color: var(--color-text-muted);
-  }
-
-  .security-content {
-    display: grid;
-    gap: 3rem;
-  }
-
-  .security-specs {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .spec-card {
-    background: linear-gradient(
-      135deg,
-      var(--color-dark-light) 0%,
-      rgba(59, 130, 246, 0.05) 100%
-    );
-    border: 1px solid rgba(59, 130, 246, 0.2);
-    border-radius: 1rem;
-    padding: 2rem;
-    text-align: center;
-    transition: all 0.3s ease;
-  }
-
-  .spec-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(59, 130, 246, 0.4);
-    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
-  }
-
-  .spec-title {
-    font-size: 1.5rem;
-    color: var(--color-primary);
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-  }
-
-  .spec-description {
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .security-features {
-    background: var(--color-dark-light);
-    border: 1px solid rgba(59, 130, 246, 0.1);
-    border-radius: 1rem;
-    padding: 2.5rem;
-  }
-
-  .features-title {
-    font-size: 1.75rem;
-    margin-bottom: 1.5rem;
-    color: var(--color-text);
-  }
-
-  .features-list {
-    list-style: none;
-    display: grid;
-    gap: 1rem;
-  }
-
-  .feature-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    color: var(--color-text-muted);
-    line-height: 1.6;
-  }
-
-  .check-icon {
-    color: var(--color-success);
-    flex-shrink: 0;
-    margin-top: 0.2rem;
-  }
-
-  @media (max-width: 768px) {
-    .section-title {
-      font-size: 2rem;
-    }
-
-    .security-specs {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>

@@ -1,0 +1,71 @@
+---
+import { Shield } from "@lucide/astro";
+
+interface Props {
+  t: (key: string) => string;
+  lang: string;
+}
+
+const { t, lang } = Astro.props;
+const otherLang = lang === "en" ? "es" : "en";
+const otherLangPath = lang === "en" ? "/es" : "/";
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-sm animate-fade-down">
+  <div class="container mx-auto flex h-16 items-center justify-between px-4">
+    <a href={lang === "en" ? "/" : "/es"} class="flex items-center gap-2 transition-all hover:text-primary hover:scale-105">
+      <Shield class="h-6 w-6 text-primary animate-glow" />
+      <span class="font-mono text-xl font-bold">Encrypt-D</span>
+    </a>
+
+    <nav class="hidden items-center gap-6 md:flex">
+      <a href="#features" class="text-sm text-muted-foreground transition-all hover:text-foreground hover:scale-105">
+        {t("nav.features")}
+      </a>
+      <a href="#security" class="text-sm text-muted-foreground transition-all hover:text-foreground hover:scale-105">
+        {t("nav.security")}
+      </a>
+      <a href="#download" class="text-sm text-muted-foreground transition-all hover:text-foreground hover:scale-105">
+        {t("nav.download")}
+      </a>
+      <a 
+        href="https://github.com/nitdraig/encrypt-d" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        class="text-sm text-muted-foreground transition-all hover:text-foreground hover:scale-105"
+      >
+        {t("nav.github")}
+      </a>
+      <a href={otherLangPath} class="text-sm font-medium text-primary transition-all hover:text-primary/80 hover:scale-110">
+        {otherLang.toUpperCase()}
+      </a>
+    </nav>
+
+    <!-- Mobile actions -->
+    <div class="flex items-center gap-3 md:hidden">
+      <a href={otherLangPath} class="flex items-center justify-center rounded-md border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-medium text-primary transition-all hover:bg-primary/20 hover:scale-105">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="mr-1"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+        {otherLang.toUpperCase()}
+      </a>
+      <a href="#download" class="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-xs font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:scale-105">
+        {t("nav.download")}
+      </a>
+    </div>
+  </div>
+</header>
+
