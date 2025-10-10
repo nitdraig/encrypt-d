@@ -9,7 +9,16 @@ from pathlib import Path
 import shutil
 from typing import Optional
 
-from core.config import *
+from core.config import (
+    APP_NAME,
+    APP_VERSION,
+    AUTH_FILE,
+    VAULT_DIR,
+    MAX_LOGIN_ATTEMPTS,
+    MIN_LOGIN_ATTEMPTS,
+    MAX_LOGIN_ATTEMPTS_LIMIT,
+)
+from core import VersionManager
 from encryption import CryptoManager
 from authentication import AuthManager
 from i18n import Translator
@@ -25,8 +34,31 @@ class EncryptDGUI:
         self.translator = Translator()
 
         self.root.title(f"{APP_NAME} v{APP_VERSION}")
-        self.root.geometry("1000x700")
-        self.root.resizable(False, False)
+
+        # Set window icon
+        self._set_window_icon()
+
+        # Get screen dimensions
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
+        # Set minimum window size
+        self.root.minsize(800, 600)
+
+        # Calculate optimal window size (80% of screen, max 1400x900)
+        window_width = min(int(screen_width * 0.8), 1400)
+        window_height = min(int(screen_height * 0.8), 900)
+
+        # Calculate position to center window
+        x = (screen_width - window_width) // 2
+        y = (screen_height - window_height) // 2
+
+        self.root.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        self.root.resizable(True, True)
+
+        # Version Manager - check for migrations BEFORE initializing other managers
+        self.version_manager = VersionManager()
+        self._handle_version_migration()
 
         # Managers
         self.crypto_manager = CryptoManager(VAULT_DIR)
@@ -46,6 +78,158 @@ class EncryptDGUI:
             self._show_setup_screen()
         else:
             self._show_login_screen()
+
+    def _set_window_icon(self):
+        """Sets the window icon for the application"""
+        try:
+            # Try to find icon.ico in multiple locations
+            import os
+            import sys
+
+            # Get base path (works for both dev and PyInstaller)
+            if getattr(sys, "frozen", False):
+                # Running as compiled executable
+                base_path = sys._MEIPASS
+            else:
+                # Running in development
+                base_path = Path(__file__).parent.parent.parent
+
+            # Possible icon locations
+            icon_paths = [
+                Path(base_path) / "icon.ico",  # Root of app
+                Path(base_path) / "app" / "icon.ico",  # In app folder
+                Path(__file__).parent.parent.parent
+                / "icon.ico",  # Relative to this file
+            ]
+
+            # Try each path
+            for icon_path in icon_paths:
+                if icon_path.exists():
+                    self.root.iconbitmap(str(icon_path))
+                    return
+
+            # If no icon found, log but don't crash
+            print("Warning: icon.ico not found, using default icon")
+
+        except Exception as e:
+            # If anything fails, just use default icon
+            print(f"Warning: Could not set window icon: {e}")
+
+    def _handle_version_migration(self):
+        """Handles version detection and migration if needed"""
+        try:
+            # Check if migration is needed
+            needs_migration, from_version, to_version = (
+                self.version_manager.needs_migration()
+            )
+
+            if needs_migration:
+                # Show migration dialog
+                self._show_migration_dialog(from_version, to_version)
+            else:
+                # First install or same version
+                info = self.version_manager.get_migration_info()
+                if info["is_first_install"]:
+                    # Save version on first install
+                    self.version_manager.save_version()
+                    print(f"First install: v{to_version}")
+                else:
+                    print(f"Version up to date: v{to_version}")
+
+        except Exception as e:
+            print(f"Warning: Version check failed: {e}")
+            # Continue anyway, don't block the app
+
+    def _show_migration_dialog(self, from_version: str, to_version: str):
+        """Shows migration dialog and performs migration"""
+        # Hide main window during migration
+        self.root.withdraw()
+
+        # Create migration dialog
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Update Required")
+        dialog.geometry("600x400")
+        dialog.resizable(False, False)
+        dialog.transient(self.root)
+        dialog.grab_set()
+
+        # Center dialog
+        dialog.update_idletasks()
+        x = (dialog.winfo_screenwidth() - 600) // 2
+        y = (dialog.winfo_screenheight() - 400) // 2
+        dialog.geometry(f"600x400+{x}+{y}")
+
+        # Content
+        main_frame = ttk.Frame(dialog, padding=30)
+        main_frame.pack(fill="both", expand=True)
+
+        # Title
+        ttk.Label(
+            main_frame,
+            text="🔄 Update Detected",
+            font=("Segoe UI", 18, "bold"),
+        ).pack(pady=(0, 20))
+
+        # Message
+        message = f"""Encrypt-D is being updated from version {from_version} to {to_version}.
+
+Your data will be automatically migrated to the new version.
+
+A backup of your current data will be created before the update.
+
+This process is safe and automatic."""
+
+        ttk.Label(
+            main_frame,
+            text=message,
+            wraplength=500,
+            justify="left",
+            font=("Segoe UI", 10),
+        ).pack(pady=(0, 20))
+
+        # Progress label
+        progress_label = ttk.Label(
+            main_frame,
+            text="Click 'Update Now' to continue",
+            font=("Segoe UI", 10, "italic"),
+        )
+        progress_label.pack(pady=(0, 20))
+
+        # Buttons frame
+        button_frame = ttk.Frame(main_frame)
+        button_frame.pack(pady=(20, 0))
+
+        def perform_migration():
+            # Update progress
+            progress_label.config(text="Creating backup...")
+            dialog.update()
+
+            # Perform migration
+            success, message = self.version_manager.migrate(from_version, to_version)
+
+            if success:
+                progress_label.config(text="✅ " + message)
+                dialog.update()
+                # Close dialog and show main window after 2 seconds
+                dialog.after(2000, lambda: (dialog.destroy(), self.root.deiconify()))
+            else:
+                progress_label.config(text="❌ " + message)
+                messagebox.showerror("Migration Failed", message, parent=dialog)
+                # Close app on migration failure
+                dialog.destroy()
+                self.root.destroy()
+
+        ttk.Button(
+            button_frame,
+            text="Update Now",
+            command=perform_migration,
+        ).pack(side="left", padx=5)
+
+        ttk.Button(
+            button_frame,
+            text="Exit",
+            command=lambda: (dialog.destroy(), self.root.destroy()),
+        ).pack(side="left", padx=5)
 
     def _setup_modern_style(self):
         """Configures modern visual style for the application"""
@@ -150,6 +334,18 @@ class EncryptDGUI:
             "Modern.Treeview",
             background=[("selected", self.colors["accent"])],
             foreground=[("selected", self.colors["text_primary"])],
+        )
+
+        # Checkbutton style
+        style.configure(
+            "TCheckbutton",
+            background=self.colors["bg_secondary"],
+            foreground=self.colors["text_primary"],
+            font=("Segoe UI", 11),
+        )
+        style.map(
+            "TCheckbutton",
+            foreground=[("active", self.colors["accent"])],
         )
 
     def _translate(self, key: str, **kwargs) -> str:
@@ -280,8 +476,31 @@ class EncryptDGUI:
         lang_selector = self._create_language_selector(top_frame)
         lang_selector.pack(side="right")
 
-        frame = ttk.Frame(self.root, padding=50)
-        frame.place(relx=0.5, rely=0.5, anchor="center")
+        # Main container with scrollbar capability
+        main_container = ttk.Frame(self.root)
+        main_container.pack(fill="both", expand=True)
+
+        # Canvas for scrolling
+        canvas = tk.Canvas(
+            main_container, bg=self.colors["bg_primary"], highlightthickness=0
+        )
+        scrollbar = ttk.Scrollbar(
+            main_container, orient="vertical", command=canvas.yview
+        )
+        scrollable_frame = ttk.Frame(canvas)
+
+        scrollable_frame.bind(
+            "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+
+        canvas.create_window((500, 0), window=scrollable_frame, anchor="n")
+        canvas.configure(yscrollcommand=scrollbar.set)
+
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
+        frame = ttk.Frame(scrollable_frame, padding=30)
+        frame.pack(pady=20)
 
         # Title
         ttk.Label(
@@ -298,22 +517,111 @@ class EncryptDGUI:
         ttk.Label(frame, text=self._translate("setup.password_label")).pack(
             pady=(30, 5)
         )
-        password_entry = ttk.Entry(frame, show="*", font=("Segoe UI", 12), width=35)
+        password_entry = ttk.Entry(frame, show="*", font=("Segoe UI", 12), width=45)
         password_entry.pack(pady=5, ipady=8)
 
         ttk.Label(frame, text=self._translate("setup.confirm_label")).pack(pady=(10, 5))
-        confirm_entry = ttk.Entry(frame, show="*", font=("Segoe UI", 12), width=35)
+        confirm_entry = ttk.Entry(frame, show="*", font=("Segoe UI", 12), width=45)
         confirm_entry.pack(pady=5, ipady=8)
+
+        # Password requirements info
+        requirements_frame = ttk.Frame(frame, style="Card.TFrame", padding=15)
+        requirements_frame.pack(pady=15, fill="x")
+
+        ttk.Label(
+            requirements_frame,
+            text=self._translate("password.requirements"),
+            justify="left",
+            font=("Segoe UI", 10),
+            foreground=self.colors["text_primary"],  # Lighter text for better contrast
+            background=self.colors["bg_secondary"],
+            wraplength=550,
+        ).pack(anchor="w", padx=5, pady=5)
+
+        # Security Options Section
+        security_frame = ttk.Frame(frame, style="Card.TFrame", padding=15)
+        security_frame.pack(pady=20, fill="x")
+
+        ttk.Label(
+            security_frame,
+            text=self._translate("setup.security_options_title"),
+            font=("Segoe UI", 14, "bold"),
+            foreground=self.colors["accent"],
+            background=self.colors["bg_secondary"],
+        ).pack(anchor="w", pady=(0, 15))
+
+        # Auto-destroy checkbox
+        auto_destroy_var = tk.BooleanVar(value=True)
+        auto_destroy_check = ttk.Checkbutton(
+            security_frame,
+            text=self._translate("setup.auto_destroy_label"),
+            variable=auto_destroy_var,
+        )
+        auto_destroy_check.pack(anchor="w", pady=5)
+
+        # Max attempts frame (shown/hidden based on checkbox)
+        attempts_frame = ttk.Frame(security_frame, style="Card.TFrame")
+        attempts_frame.pack(fill="x", pady=10)
+
+        ttk.Label(
+            attempts_frame,
+            text=self._translate("setup.max_attempts_label"),
+            background=self.colors["bg_secondary"],
+            foreground=self.colors["text_primary"],  # Lighter text for better contrast
+            font=("Segoe UI", 10),
+        ).pack(anchor="w", pady=5, padx=5)
+
+        attempts_var = tk.IntVar(value=MAX_LOGIN_ATTEMPTS)
+        attempts_spinbox = ttk.Spinbox(
+            attempts_frame,
+            from_=MIN_LOGIN_ATTEMPTS,
+            to=MAX_LOGIN_ATTEMPTS_LIMIT,
+            textvariable=attempts_var,
+            width=10,
+            font=("Segoe UI", 11),
+        )
+        attempts_spinbox.pack(anchor="w", pady=5)
+
+        # Info label
+        info_label = ttk.Label(
+            attempts_frame,
+            text=self._translate("setup.attempts_note"),
+            font=("Segoe UI", 10),
+            foreground="#ffb84d",  # Lighter orange for better contrast
+            background=self.colors["bg_secondary"],
+            wraplength=500,
+            justify="left",
+        )
+        info_label.pack(anchor="w", pady=5, padx=5)
+
+        # Toggle visibility of attempts options
+        def toggle_attempts_options():
+            if auto_destroy_var.get():
+                for widget in attempts_frame.winfo_children():
+                    widget.configure(state="normal")
+                info_label.configure(text=self._translate("setup.attempts_note"))
+            else:
+                for widget in attempts_frame.winfo_children():
+                    if isinstance(widget, ttk.Spinbox):
+                        widget.configure(state="disabled")
+                info_label.configure(text=self._translate("setup.no_limit_note"))
+
+        auto_destroy_check.configure(command=toggle_attempts_options)
 
         # Security information
         info_text = (
             self._translate("setup.warning_title")
             + "\n\n"
-            + self._translate("setup.warning_text", max_attempts=MAX_LOGIN_ATTEMPTS)
+            + self._translate("setup.warning_text")
         )
 
         ttk.Label(
-            frame, text=info_text, justify="left", foreground=self.colors["warning"]
+            frame,
+            text=info_text,
+            justify="left",
+            foreground="#ffb84d",  # Lighter orange for better contrast
+            font=("Segoe UI", 10),
+            wraplength=600,
         ).pack(pady=20)
 
         # Setup button
@@ -334,7 +642,12 @@ class EncryptDGUI:
                 )
                 return
 
-            success, message = self.auth_manager.set_password(password)
+            auto_destroy = auto_destroy_var.get()
+            max_attempts = attempts_var.get()
+
+            success, message = self.auth_manager.set_password(
+                password, auto_destroy, max_attempts
+            )
 
             if success:
                 messagebox.showinfo(
@@ -353,6 +666,12 @@ class EncryptDGUI:
 
         # Bind Enter key
         confirm_entry.bind("<Return>", lambda e: setup_password())
+
+        # Bind mouse wheel to scroll
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
     def _show_login_screen(self):
         """Displays login screen"""
@@ -376,19 +695,22 @@ class EncryptDGUI:
             frame, text=self._translate("login.subtitle"), style="Subtitle.TLabel"
         ).pack(pady=10)
 
-        # Remaining attempts
-        attempts_remaining = self.auth_manager.get_attempts_remaining()
-        color = (
-            self.colors["error"] if attempts_remaining <= 2 else self.colors["warning"]
-        )
-        ttk.Label(
-            frame,
-            text=self._translate(
-                "login.attempts_remaining", attempts=attempts_remaining
-            ),
-            foreground=color,
-            font=("Segoe UI", 10, "bold"),
-        ).pack(pady=10)
+        # Remaining attempts (only if auto-destroy is enabled)
+        if self.auth_manager.is_auto_destroy_enabled():
+            attempts_remaining = self.auth_manager.get_attempts_remaining()
+            color = (
+                self.colors["error"]
+                if attempts_remaining <= 2
+                else self.colors["warning"]
+            )
+            ttk.Label(
+                frame,
+                text=self._translate(
+                    "login.attempts_remaining", attempts=attempts_remaining
+                ),
+                foreground=color,
+                font=("Segoe UI", 10, "bold"),
+            ).pack(pady=10)
 
         # Password field
         ttk.Label(frame, text=self._translate("login.password_label")).pack(
@@ -579,6 +901,56 @@ class EncryptDGUI:
         # Load folders
         self._refresh_list()
 
+        # Excelso footer
+        self._add_excelso_footer(main_frame)
+
+    def _add_excelso_footer(self, parent):
+        """Adds Excelso branding footer"""
+        from core.config import EXCELSO_COMPANY, EXCELSO_SLOGAN, EXCELSO_URL
+
+        footer = ttk.Frame(parent, style="Secondary.TFrame", padding=10)
+        footer.pack(fill="x", side="bottom")
+
+        # Centered footer content
+        footer_content = ttk.Frame(footer, style="Secondary.TFrame")
+        footer_content.pack(anchor="center")
+
+        # "Supported by Excelso" text
+        supported_text = tk.Label(
+            footer_content,
+            text=f"Supported by {EXCELSO_COMPANY}",
+            font=("Segoe UI", 9),
+            fg=self.colors["text_secondary"],
+            bg=self.colors["bg_secondary"],
+            cursor="hand2",
+        )
+        supported_text.pack(side="left", padx=(0, 5))
+        supported_text.bind("<Button-1>", lambda e: self._open_url(EXCELSO_URL))
+
+        # Separator
+        tk.Label(
+            footer_content,
+            text="•",
+            font=("Segoe UI", 9),
+            fg=self.colors["text_secondary"],
+            bg=self.colors["bg_secondary"],
+        ).pack(side="left", padx=5)
+
+        # Slogan
+        tk.Label(
+            footer_content,
+            text=EXCELSO_SLOGAN,
+            font=("Segoe UI", 9, "italic"),
+            fg=self.colors["accent"],
+            bg=self.colors["bg_secondary"],
+        ).pack(side="left", padx=(5, 0))
+
+    def _open_url(self, url):
+        """Opens URL in default browser"""
+        import webbrowser
+
+        webbrowser.open(url)
+
     def _show_about_dialog(self):
         """Displays about dialog with app information"""
         dialog = tk.Toplevel(self.root)
@@ -684,6 +1056,45 @@ class EncryptDGUI:
             justify="left",
             background=self.colors["bg_secondary"],
         ).pack(anchor="w")
+
+        # Excelso branding section
+        excelso_frame = ttk.Frame(main_frame, style="Card.TFrame", padding=15)
+        excelso_frame.pack(fill="x", pady=(0, 20))
+
+        from core.config import (
+            EXCELSO_COMPANY,
+            EXCELSO_SLOGAN,
+            EXCELSO_URL,
+            EXCELSO_DOMAIN,
+        )
+
+        ttk.Label(
+            excelso_frame,
+            text=f"Supported by {EXCELSO_COMPANY}",
+            font=("Segoe UI", 12, "bold"),
+            foreground=self.colors["accent"],
+            background=self.colors["bg_secondary"],
+        ).pack(anchor="w", pady=(0, 5))
+
+        ttk.Label(
+            excelso_frame,
+            text=EXCELSO_SLOGAN,
+            font=("Segoe UI", 10, "italic"),
+            foreground=self.colors["text_secondary"],
+            background=self.colors["bg_secondary"],
+        ).pack(anchor="w", pady=(0, 10))
+
+        # Website link
+        website_label = tk.Label(
+            excelso_frame,
+            text=EXCELSO_DOMAIN,
+            font=("Segoe UI", 10, "underline"),
+            foreground=self.colors["accent"],
+            background=self.colors["bg_secondary"],
+            cursor="hand2",
+        )
+        website_label.pack(anchor="w")
+        website_label.bind("<Button-1>", lambda e: self._open_url(EXCELSO_URL))
 
         # Close button
         ttk.Button(

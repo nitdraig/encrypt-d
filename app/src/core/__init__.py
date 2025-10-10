@@ -4,6 +4,7 @@ Contains configuration and shared utilities
 """
 
 from .config import *
+from .version_manager import VersionManager
 
 __all__ = [
     "APP_NAME",
@@ -18,4 +19,5 @@ __all__ = [
     "CHUNK_SIZE",
     "FILE_ATTRIBUTE_HIDDEN",
     "FILE_ATTRIBUTE_SYSTEM",
+    "VersionManager",
 ]

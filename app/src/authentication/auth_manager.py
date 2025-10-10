@@ -38,6 +38,8 @@ class AuthManager:
             "locked": False,
             "created_at": datetime.now().isoformat(),
             "last_login": None,
+            "auto_destroy_enabled": True,
+            "max_attempts": self.max_attempts,
         }
 
     def _save_auth_data(self):
@@ -53,18 +55,56 @@ class AuthManager:
         """Verifica si existe una contraseña configurada"""
         return self.auth_data.get("password_hash") is not None
 
-    def set_password(self, password: str) -> Tuple[bool, str]:
+    def validate_password_strength(self, password: str) -> Tuple[bool, str]:
+        """
+        Validates password strength requirements
+
+        Args:
+            password: Password to validate
+
+        Returns:
+            Tuple[bool, str]: (valid, error_message)
+        """
+        if len(password) < 8:
+            return False, "Password must be at least 8 characters long"
+
+        has_uppercase = any(c.isupper() for c in password)
+        has_lowercase = any(c.islower() for c in password)
+        has_digit = any(c.isdigit() for c in password)
+        has_symbol = any(not c.isalnum() for c in password)
+
+        if not has_uppercase:
+            return False, "Password must contain at least one uppercase letter"
+        if not has_lowercase:
+            return False, "Password must contain at least one lowercase letter"
+        if not has_digit:
+            return False, "Password must contain at least one number"
+        if not has_symbol:
+            return False, "Password must contain at least one special character"
+
+        return True, "Password is strong"
+
+    def set_password(
+        self,
+        password: str,
+        auto_destroy_enabled: bool = True,
+        max_attempts: int = 3,
+    ) -> Tuple[bool, str]:
         """
         Establece la contraseña maestra
 
         Args:
             password: Nueva contraseña
+            auto_destroy_enabled: Si la auto-destrucción está habilitada
+            max_attempts: Número máximo de intentos permitidos
 
         Returns:
             Tuple[bool, str]: (éxito, mensaje)
         """
-        if len(password) < 6:
-            return False, "La contraseña debe tener al menos 6 caracteres"
+        # Validate password strength
+        valid, message = self.validate_password_strength(password)
+        if not valid:
+            return False, message
 
         # Generar salt
         salt = secrets.token_bytes(32)
@@ -77,6 +117,9 @@ class AuthManager:
         self.auth_data["salt"] = salt.hex()
         self.auth_data["failed_attempts"] = 0
         self.auth_data["locked"] = False
+        self.auth_data["auto_destroy_enabled"] = auto_destroy_enabled
+        self.auth_data["max_attempts"] = max_attempts
+        self.max_attempts = max_attempts
 
         self._save_auth_data()
 
@@ -103,6 +146,10 @@ class AuthManager:
         if not self.has_password():
             return False, "No hay contraseña configurada"
 
+        # Get current settings
+        auto_destroy = self.auth_data.get("auto_destroy_enabled", True)
+        max_attempts = self.auth_data.get("max_attempts", self.max_attempts)
+
         # Obtener salt y hash guardados
         salt = bytes.fromhex(self.auth_data["salt"])
         stored_hash = self.auth_data["password_hash"]
@@ -119,17 +166,26 @@ class AuthManager:
             return True, "Acceso concedido"
         else:
             # Contraseña incorrecta
-            self.auth_data["failed_attempts"] += 1
-            attempts_left = self.max_attempts - self.auth_data["failed_attempts"]
+            if auto_destroy:
+                self.auth_data["failed_attempts"] += 1
+                attempts_left = max_attempts - self.auth_data["failed_attempts"]
 
-            if attempts_left <= 0:
-                # Bloquear y marcar para destrucción
-                self.auth_data["locked"] = True
+                if attempts_left <= 0:
+                    # Bloquear y marcar para destrucción
+                    self.auth_data["locked"] = True
+                    self._save_auth_data()
+                    return False, "LÍMITE DE INTENTOS EXCEDIDO. Sistema bloqueado."
+
                 self._save_auth_data()
-                return False, "LÍMITE DE INTENTOS EXCEDIDO. Sistema bloqueado."
-
-            self._save_auth_data()
-            return False, f"Contraseña incorrecta. Intentos restantes: {attempts_left}"
+                return (
+                    False,
+                    f"Contraseña incorrecta. Intentos restantes: {attempts_left}",
+                )
+            else:
+                # No auto-destroy, just increment counter without limit
+                self.auth_data["failed_attempts"] += 1
+                self._save_auth_data()
+                return False, "Contraseña incorrecta."
 
     def is_locked(self) -> bool:
         """Verifica si el sistema está bloqueado"""
@@ -166,4 +222,13 @@ class AuthManager:
 
     def get_attempts_remaining(self) -> int:
         """Retorna intentos restantes antes del bloqueo"""
-        return max(0, self.max_attempts - self.auth_data.get("failed_attempts", 0))
+        max_attempts = self.auth_data.get("max_attempts", self.max_attempts)
+        return max(0, max_attempts - self.auth_data.get("failed_attempts", 0))
+
+    def is_auto_destroy_enabled(self) -> bool:
+        """Verifica si la auto-destrucción está habilitada"""
+        return self.auth_data.get("auto_destroy_enabled", True)
+
+    def get_max_attempts(self) -> int:
+        """Obtiene el número máximo de intentos configurado"""
+        return self.auth_data.get("max_attempts", self.max_attempts)

@@ -13,8 +13,9 @@
     "cta": {
       "download": "Download for Windows",
       "learnMore": "Learn More",
-      "version": "Version 1.0.0"
-    }
+      "version": "Version 1.1.0"
+    },
+    "badge": "NEW: Configurable Security"
   },
   "features": {
     "title": "Powerful Features",
@@ -25,16 +26,16 @@
         "description": "AES-256-GCM encryption standard ensures your data is protected with the highest level of security."
       },
       "autodestruct": {
-        "title": "Auto-Destruction",
-        "description": "After 3 failed password attempts, all data is automatically destroyed to prevent unauthorized access."
+        "title": "Configurable Auto-Destruction",
+        "description": "Choose your security level: enable auto-destruction (1-10 attempts) or disable it for unlimited tries. NEW in v1.1!"
       },
       "hidden": {
         "title": "Hidden Folders",
         "description": "Encrypted folders are completely hidden from Windows Explorer with HIDDEN + SYSTEM attributes."
       },
       "multilang": {
-        "title": "Multi-Language Support",
-        "description": "Beautiful interface available in English and Spanish, with more languages coming soon."
+        "title": "Responsive Interface",
+        "description": "Adaptive UI that adjusts to your screen size. Strong password requirements ensure maximum security. NEW in v1.1!"
       },
       "modular": {
         "title": "Modular Architecture",
@@ -60,7 +61,7 @@
       },
       "protection": {
         "title": "Brute Force Protection",
-        "description": "Limited login attempts"
+        "description": "Configurable (1-10) or unlimited"
       },
       "privacy": {
         "title": "Complete Privacy",
@@ -70,10 +71,10 @@
     "features": [
       "Unique salt per folder for maximum security",
       "12-byte unique nonce per encrypted file",
-      "Master password protection with PBKDF2",
+      "Strong password requirements (8+ chars, A-Z, a-z, 0-9, symbols)",
+      "Configurable auto-destruction (1-10 attempts or disabled)",
       "Persistent failed attempt counter",
-      "Automatic lockout after maximum attempts",
-      "No password recovery - ultimate security"
+      "Responsive interface adapts to any screen size"
     ]
   },
   "howItWorks": {
@@ -81,8 +82,8 @@
     "subtitle": "Simple steps to secure your data",
     "steps": {
       "1": {
-        "title": "Set Master Password",
-        "description": "Create a strong master password on first launch. This password protects all your encrypted folders."
+        "title": "Configure Security",
+        "description": "Create a strong master password (8+ chars with uppercase, lowercase, numbers, and symbols). Choose auto-destruction settings."
       },
       "2": {
         "title": "Add Folders",

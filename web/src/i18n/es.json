@@ -13,8 +13,9 @@
     "cta": {
       "download": "Descargar para Windows",
       "learnMore": "Conocer Más",
-      "version": "Versión 1.0.0"
-    }
+      "version": "Versión 1.1.0"
+    },
+    "badge": "NUEVO: Seguridad Configurable"
   },
   "features": {
     "title": "Características Poderosas",
@@ -25,16 +26,16 @@
         "description": "El estándar de encriptación AES-256-GCM asegura que tus datos estén protegidos con el más alto nivel de seguridad."
       },
       "autodestruct": {
-        "title": "Auto-Destrucción",
-        "description": "Después de 3 intentos fallidos de contraseña, todos los datos son destruidos automáticamente para prevenir accesos no autorizados."
+        "title": "Auto-Destrucción Configurable",
+        "description": "Elige tu nivel de seguridad: activa auto-destrucción (1-10 intentos) o desactívala para intentos ilimitados. ¡NUEVO en v1.1!"
       },
       "hidden": {
         "title": "Carpetas Ocultas",
         "description": "Las carpetas encriptadas están completamente ocultas del Explorador de Windows con atributos HIDDEN + SYSTEM."
       },
       "multilang": {
-        "title": "Soporte Multi-Idioma",
-        "description": "Interfaz hermosa disponible en inglés y español, con más idiomas próximamente."
+        "title": "Interfaz Responsive",
+        "description": "UI adaptable que se ajusta al tamaño de tu pantalla. Requisitos de contraseña robustos garantizan máxima seguridad. ¡NUEVO en v1.1!"
       },
       "modular": {
         "title": "Arquitectura Modular",
@@ -60,7 +61,7 @@
       },
       "protection": {
         "title": "Protección Fuerza Bruta",
-        "description": "Intentos de login limitados"
+        "description": "Configurable (1-10) o ilimitado"
       },
       "privacy": {
         "title": "Privacidad Completa",
@@ -70,10 +71,10 @@
     "features": [
       "Salt único por carpeta para máxima seguridad",
       "Nonce único de 12 bytes por archivo encriptado",
-      "Protección con contraseña maestra usando PBKDF2",
+      "Requisitos de contraseña robustos (8+ caracteres, A-Z, a-z, 0-9, símbolos)",
+      "Auto-destrucción configurable (1-10 intentos o desactivada)",
       "Contador persistente de intentos fallidos",
-      "Bloqueo automático tras alcanzar intentos máximos",
-      "Sin recuperación de contraseña - máxima seguridad"
+      "Interfaz responsive que se adapta a cualquier tamaño de pantalla"
     ]
   },
   "howItWorks": {
@@ -81,8 +82,8 @@
     "subtitle": "Pasos simples para asegurar tus datos",
     "steps": {
       "1": {
-        "title": "Establecer Contraseña Maestra",
-        "description": "Crea una contraseña maestra fuerte en el primer inicio. Esta contraseña protege todas tus carpetas encriptadas."
+        "title": "Configurar Seguridad",
+        "description": "Crea una contraseña maestra fuerte (8+ caracteres con mayúsculas, minúsculas, números y símbolos). Elige configuración de auto-destrucción."
       },
       "2": {
         "title": "Agregar Carpetas",

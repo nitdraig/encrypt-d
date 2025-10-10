@@ -12,13 +12,19 @@
   "setup": {
     "welcome_title": "🔒 Bienvenido a Encrypt-D",
     "welcome_subtitle": "Configure su contraseña maestra para comenzar",
-    "password_label": "Contraseña (mínimo 6 caracteres):",
+    "password_label": "Contraseña (mín 8 caracteres: A-Z, a-z, 0-9, símbolos):",
     "confirm_label": "Confirmar contraseña:",
+    "security_options_title": "🛡️ Opciones de Seguridad",
+    "auto_destroy_label": "Habilitar auto-destrucción tras intentos fallidos",
+    "max_attempts_label": "Intentos máximos de inicio de sesión:",
+    "attempts_note": "Elija entre 1-10 intentos. Al excederlos, todos los datos serán destruidos.",
+    "no_limit_note": "Con auto-destrucción deshabilitada, se permiten intentos ilimitados.",
     "warning_title": "⚠️  IMPORTANTE:",
-    "warning_text": "• Después de {max_attempts} intentos fallidos,\n  todos los datos serán destruidos\n• No hay forma de recuperar la contraseña\n• Guarde su contraseña en un lugar seguro",
+    "warning_text": "• No hay forma de recuperar la contraseña\n• Guarde su contraseña en un lugar seguro\n• Se requieren contraseñas fuertes por seguridad",
     "button_continue": "Configurar y Continuar",
     "error_empty": "Ingrese una contraseña",
     "error_mismatch": "Las contraseñas no coinciden",
+    "error_weak_password": "La contraseña no cumple con los requisitos de seguridad",
     "success": "Contraseña configurada correctamente"
   },
   "login": {
@@ -73,14 +79,15 @@
   "password": {
     "change_title": "Cambiar Contraseña",
     "current_label": "Contraseña actual:",
-    "new_label": "Nueva contraseña:",
+    "new_label": "Nueva contraseña (mín 8 caracteres: A-Z, a-z, 0-9, símbolos):",
     "confirm_label": "Confirmar nueva contraseña:",
     "button_change": "Cambiar Contraseña",
     "error_empty": "Complete todos los campos",
     "error_mismatch": "Las contraseñas nuevas no coinciden",
     "error_current_incorrect": "Contraseña actual incorrecta. {message}",
     "success": "Contraseña cambiada correctamente",
-    "min_length": "La contraseña debe tener al menos 6 caracteres"
+    "min_length": "La contraseña debe tener al menos 8 caracteres",
+    "requirements": "Requisitos de contraseña:\n• Al menos 8 caracteres\n• Letras mayúsculas (A-Z)\n• Letras minúsculas (a-z)\n• Números (0-9)\n• Caracteres especiales (!@#$%^&*...)"
   },
   "error": {
     "title": "Error",

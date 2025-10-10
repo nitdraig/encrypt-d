@@ -4,6 +4,12 @@
 
 ### Code Language: English
 
+### Comments Language: English
+
+### Commit Messages Language: English
+
+### No create a readme.md file for any functionality
+
 - All code MUST be written in English
 - Variable names, function names, class names: English only
 - Comments and docstrings: English only

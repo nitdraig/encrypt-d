@@ -183,16 +183,18 @@ See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed guides.
 1. ✅ **Customize content** - Update translations with your info
 2. ✅ **Update links** - Replace placeholder GitHub URLs
 3. ✅ **Add download link** - Update when you have releases
-4. ✅ **Test both languages** - Make sure everything works
-5. ✅ **Build and deploy** - Get it online!
+4. ✅ **Set up analytics** - Configure Google Analytics & Clarity (optional)
+5. ✅ **Test both languages** - Make sure everything works
+6. ✅ **Build and deploy** - Get it online!
 
 ---
 
 ## 📚 Learn More
 
-- [README.md](./README.md) - Full project documentation
+- [ANALYTICS_SETUP.md](./ANALYTICS_SETUP.md) - Set up Google Analytics & Clarity
 - [FEATURES.md](./FEATURES.md) - Complete features list
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment guides
+- [PROJECT_SUMMARY.md](./PROJECT_SUMMARY.md) - Project overview
 - [Astro Docs](https://docs.astro.build/) - Learn Astro
 
 ---

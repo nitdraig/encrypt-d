@@ -65,7 +65,8 @@ encrypt-d/
 
 - **AES-256-GCM encryption** (military standard)
 - **PBKDF2-SHA256 hashing** (100,000 iterations)
-- **Auto-destruction** after 3 failed attempts
+- **Configurable auto-destruction** (1-10 attempts or disabled) ⭐ NEW in v1.1
+- **Strong password requirements** (min 8 chars: A-Z, a-z, 0-9, symbols) ⭐ NEW in v1.1
 - **Hidden folders** from Windows Explorer
 
 ### 🌍 Multi-language
@@ -82,13 +83,20 @@ encrypt-d/
 - **Easy to maintain and extend**
 - **Independent modules**
 
+### 🎨 User Experience
+
+- **Responsive interface** adapts to screen size ⭐ NEW in v1.1
+- **Customizable security settings** ⭐ NEW in v1.1
+- **Modern dark theme**
+- **Intuitive workflows**
+
 ## 🚀 Quick Start
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/excelso/encrypt-d.git
 cd encrypt-d
 
 # Install dependencies

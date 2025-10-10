@@ -7,7 +7,13 @@ from pathlib import Path
 
 # Configuración de la aplicación
 APP_NAME = "Encrypt-D"
-APP_VERSION = "1.0.0"
+APP_VERSION = "1.1.0"
+
+# Excelso branding
+EXCELSO_COMPANY = "Excelso"
+EXCELSO_DOMAIN = "excelso.xyz"
+EXCELSO_SLOGAN = "We are solutions. We are EXCELSO"
+EXCELSO_URL = f"https://{EXCELSO_DOMAIN}"
 
 # Directorio de datos de la aplicación
 APP_DATA_DIR = (
@@ -24,7 +30,9 @@ VAULT_DIR = APP_DATA_DIR / "vault"
 VAULT_DIR.mkdir(parents=True, exist_ok=True)
 
 # Configuración de seguridad
-MAX_LOGIN_ATTEMPTS = 3
+MAX_LOGIN_ATTEMPTS = 3  # Default value
+MIN_LOGIN_ATTEMPTS = 1
+MAX_LOGIN_ATTEMPTS_LIMIT = 10
 SALT_SIZE = 32
 KEY_ITERATIONS = 100000
 
