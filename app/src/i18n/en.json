@@ -12,7 +12,7 @@
   "setup": {
     "welcome_title": "🔒 Welcome to Encrypt-D",
     "welcome_subtitle": "Set up your master password to begin",
-    "password_label": "Password (min 8 chars: A-Z, a-z, 0-9, symbols):",
+    "password_label": "Password (min 12 chars: A-Z, a-z, 0-9, symbols):",
     "confirm_label": "Confirm password:",
     "security_options_title": "🛡️ Security Options",
     "auto_destroy_label": "Enable auto-destruction after failed attempts",
@@ -79,15 +79,15 @@
   "password": {
     "change_title": "Change Password",
     "current_label": "Current password:",
-    "new_label": "New password (min 8 chars: A-Z, a-z, 0-9, symbols):",
+    "new_label": "New password (min 12 chars: A-Z, a-z, 0-9, symbols):",
     "confirm_label": "Confirm new password:",
     "button_change": "Change Password",
     "error_empty": "Fill in all fields",
     "error_mismatch": "New passwords do not match",
     "error_current_incorrect": "Current password incorrect. {message}",
     "success": "Password changed successfully",
-    "min_length": "Password must be at least 8 characters",
-    "requirements": "Password requirements:\n• At least 8 characters\n• Uppercase letters (A-Z)\n• Lowercase letters (a-z)\n• Numbers (0-9)\n• Special characters (!@#$%^&*...)"
+    "min_length": "Password must be at least 12 characters",
+    "requirements": "Password requirements:\n• At least 12 characters\n• Uppercase letters (A-Z)\n• Lowercase letters (a-z)\n• Numbers (0-9)\n• Special characters (!@#$%^&*...)"
   },
   "error": {
     "title": "Error",

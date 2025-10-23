@@ -51,8 +51,8 @@ class Translator:
                 lang_code = system_locale.split("_")[0].lower()
                 if lang_code in self.translations:
                     self.current_language = lang_code
-        except:
-            pass
+        except Exception as e:
+            print(f"Warning: Language detection failed: {e}")
 
     def set_language(self, language_code: str) -> bool:
         """

@@ -12,7 +12,7 @@
   "setup": {
     "welcome_title": "🔒 Bienvenido a Encrypt-D",
     "welcome_subtitle": "Configure su contraseña maestra para comenzar",
-    "password_label": "Contraseña (mín 8 caracteres: A-Z, a-z, 0-9, símbolos):",
+    "password_label": "Contraseña (mín 12 caracteres: A-Z, a-z, 0-9, símbolos):",
     "confirm_label": "Confirmar contraseña:",
     "security_options_title": "🛡️ Opciones de Seguridad",
     "auto_destroy_label": "Habilitar auto-destrucción tras intentos fallidos",
@@ -79,15 +79,15 @@
   "password": {
     "change_title": "Cambiar Contraseña",
     "current_label": "Contraseña actual:",
-    "new_label": "Nueva contraseña (mín 8 caracteres: A-Z, a-z, 0-9, símbolos):",
+    "new_label": "Nueva contraseña (mín 12 caracteres: A-Z, a-z, 0-9, símbolos):",
     "confirm_label": "Confirmar nueva contraseña:",
     "button_change": "Cambiar Contraseña",
     "error_empty": "Complete todos los campos",
     "error_mismatch": "Las contraseñas nuevas no coinciden",
     "error_current_incorrect": "Contraseña actual incorrecta. {message}",
     "success": "Contraseña cambiada correctamente",
-    "min_length": "La contraseña debe tener al menos 8 caracteres",
-    "requirements": "Requisitos de contraseña:\n• Al menos 8 caracteres\n• Letras mayúsculas (A-Z)\n• Letras minúsculas (a-z)\n• Números (0-9)\n• Caracteres especiales (!@#$%^&*...)"
+    "min_length": "La contraseña debe tener al menos 12 caracteres",
+    "requirements": "Requisitos de contraseña:\n• Al menos 12 caracteres\n• Letras mayúsculas (A-Z)\n• Letras minúsculas (a-z)\n• Números (0-9)\n• Caracteres especiales (!@#$%^&*...)"
   },
   "error": {
     "title": "Error",

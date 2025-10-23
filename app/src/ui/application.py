@@ -7,6 +7,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from pathlib import Path
 import shutil
+import time
 from typing import Optional
 
 from core.config import (
@@ -19,6 +20,8 @@ from core.config import (
     MAX_LOGIN_ATTEMPTS_LIMIT,
 )
 from core import VersionManager
+from core.security_logger import init_security_logger, get_logger
+from core.secure_string import SecurePassword
 from encryption import CryptoManager
 from authentication import AuthManager
 from i18n import Translator
@@ -32,6 +35,13 @@ class EncryptDGUI:
 
         # Initialize translator
         self.translator = Translator()
+
+        # Initialize security logger
+        log_dir = VAULT_DIR / "logs"
+        init_security_logger(log_dir)
+        logger = get_logger()
+        if logger:
+            logger.log_app_started()
 
         self.root.title(f"{APP_NAME} v{APP_VERSION}")
 
@@ -66,10 +76,24 @@ class EncryptDGUI:
 
         # State
         self.authenticated = False
-        self.current_password = None
+        self.secure_password = (
+            SecurePassword()
+        )  # Secure password storage (CRIT-002 fix)
+
+        # Session timeout (15 minutes of inactivity)
+        self.session_timeout = 15 * 60 * 1000  # milliseconds
+        self.last_activity = None
+        self.timeout_check_id = None
 
         # Configure modern style
         self._setup_modern_style()
+
+        # Configure window close handler
+        self.root.protocol("WM_DELETE_WINDOW", self._on_close)
+
+        # Bind activity events for session timeout
+        self.root.bind_all("<Key>", lambda e: self._reset_activity_timer())
+        self.root.bind_all("<Button>", lambda e: self._reset_activity_timer())
 
         # Check initial state
         if self.auth_manager.is_locked():
@@ -734,7 +758,8 @@ This process is safe and automatic."""
 
             if success:
                 self.authenticated = True
-                self.current_password = password
+                self.secure_password.set(password)
+                self._start_session_timer()
                 self._show_main_screen()
             else:
                 messagebox.showerror(self._translate("login.access_denied"), message)
@@ -1186,9 +1211,9 @@ This process is safe and automatic."""
         if not response:
             return
 
-        # Encrypt
-        success, message = self.crypto_manager.encrypt_folder(
-            folder_path, self.current_password, result["name"] or None
+        # Encrypt (using secure password method)
+        success, message = self.crypto_manager.encrypt_folder_secure(
+            folder_path, self.secure_password, result["name"] or None
         )
 
         if success:
@@ -1205,11 +1230,20 @@ This process is safe and automatic."""
 
             if delete_original:
                 try:
-                    shutil.rmtree(folder_path)
-                    messagebox.showinfo(
-                        self._translate("success.title"),
-                        self._translate("locked.success"),
-                    )
+                    # Import secure delete function
+                    from encryption.crypto_manager import secure_delete_directory
+
+                    # Securely delete original folder
+                    if secure_delete_directory(Path(folder_path), passes=3):
+                        messagebox.showinfo(
+                            self._translate("success.title"),
+                            self._translate("locked.success"),
+                        )
+                    else:
+                        messagebox.showerror(
+                            self._translate("error.title"),
+                            "Could not securely delete folder",
+                        )
                 except Exception as e:
                     messagebox.showerror(
                         self._translate("error.title"),
@@ -1259,9 +1293,9 @@ This process is safe and automatic."""
         if not output_path:
             return
 
-        # Decrypt
-        success, message = self.crypto_manager.decrypt_folder(
-            full_id, self.current_password, output_path
+        # Decrypt (using secure password method)
+        success, message = self.crypto_manager.decrypt_folder_secure(
+            full_id, self.secure_password, output_path
         )
 
         if success:
@@ -1376,7 +1410,7 @@ This process is safe and automatic."""
             success, message = self.auth_manager.change_password(old_pass, new_pass)
 
             if success:
-                self.current_password = new_pass
+                self.secure_password.set(new_pass)
                 messagebox.showinfo(
                     self._translate("success.title"),
                     self._translate("password.success"),
@@ -1401,8 +1435,64 @@ This process is safe and automatic."""
 
         if response:
             self.authenticated = False
-            self.current_password = None
+            self.secure_password.clear()
+            self._stop_session_timer()
             self._show_login_screen()
+
+    def _reset_activity_timer(self):
+        """Resets the inactivity timer"""
+        if self.authenticated:
+            self.last_activity = time.time()
+
+    def _check_session_timeout(self):
+        """Checks if session has timed out due to inactivity"""
+        if not self.authenticated:
+            return
+
+        if self.last_activity is not None:
+            elapsed = time.time() - self.last_activity
+            if elapsed * 1000 >= self.session_timeout:
+                self._handle_timeout()
+                return
+
+        # Schedule next check (every 30 seconds)
+        self.timeout_check_id = self.root.after(30000, self._check_session_timeout)
+
+    def _handle_timeout(self):
+        """Handles session timeout"""
+        if self.authenticated:
+            self.authenticated = False
+            self.secure_password.clear()
+            self._stop_session_timer()
+            messagebox.showwarning(
+                self._translate("warning.title"),
+                "Session expired due to inactivity. Please log in again.",
+            )
+            self._show_login_screen()
+
+    def _start_session_timer(self):
+        """Starts the session timeout monitoring"""
+        self.last_activity = time.time()
+        if self.timeout_check_id:
+            self.root.after_cancel(self.timeout_check_id)
+        self.timeout_check_id = self.root.after(30000, self._check_session_timeout)
+
+    def _stop_session_timer(self):
+        """Stops the session timeout monitoring"""
+        if self.timeout_check_id:
+            self.root.after_cancel(self.timeout_check_id)
+            self.timeout_check_id = None
+        self.last_activity = None
+
+    def _on_close(self):
+        """Handles application close event"""
+        # Clear password from memory before closing
+        self.secure_password.clear()
+
+        logger = get_logger()
+        if logger:
+            logger.log_app_closed()
+        self.root.destroy()
 
     def run(self):
         """Starts the application"""

@@ -8,11 +8,18 @@ import hashlib
 import secrets
 from pathlib import Path
 from typing import Optional, Tuple
-from datetime import datetime
+from datetime import datetime, timedelta
+from core.security_logger import get_logger
+from core.permissions import set_restricted_permissions
 
 
 class AuthManager:
     """Gestiona autenticación y seguridad de acceso"""
+
+    # Rate limiting constants
+    RATE_LIMIT_WINDOW = 60  # seconds
+    RATE_LIMIT_MAX_ATTEMPTS = 5  # max attempts within window
+    RATE_LIMIT_LOCKOUT_TIME = 300  # 5 minutes lockout
 
     def __init__(self, auth_file: Path, max_attempts: int = 3):
         self.auth_file = auth_file
@@ -25,8 +32,12 @@ class AuthManager:
             try:
                 with open(self.auth_file, "r", encoding="utf-8") as f:
                     return json.load(f)
-            except:
+            except (FileNotFoundError, json.JSONDecodeError, PermissionError) as e:
+                print(f"Warning: Auth file load failed: {e}")
                 return self._create_default_auth_data()
+            except Exception as e:
+                print(f"Critical: Unexpected error loading auth: {e}")
+                raise
         return self._create_default_auth_data()
 
     def _create_default_auth_data(self) -> dict:
@@ -40,12 +51,81 @@ class AuthManager:
             "last_login": None,
             "auto_destroy_enabled": True,
             "max_attempts": self.max_attempts,
+            # Rate limiting fields
+            "rate_limit_attempts": [],  # List of timestamp strings
+            "rate_limit_locked_until": None,  # ISO timestamp or None
         }
 
     def _save_auth_data(self):
         """Guarda datos de autenticación"""
         with open(self.auth_file, "w", encoding="utf-8") as f:
             json.dump(self.auth_data, f, indent=2)
+
+        # Set restrictive permissions on auth file
+        set_restricted_permissions(self.auth_file)
+
+    def _check_rate_limit(self) -> Tuple[bool, str]:
+        """
+        Checks if rate limiting is in effect
+
+        Returns:
+            Tuple[bool, str]: (allowed, message)
+        """
+        now = datetime.now()
+
+        # Check if currently locked out
+        locked_until = self.auth_data.get("rate_limit_locked_until")
+        if locked_until:
+            locked_time = datetime.fromisoformat(locked_until)
+            if now < locked_time:
+                remaining = int((locked_time - now).total_seconds())
+                return False, f"Too many attempts. Locked for {remaining} more seconds."
+            else:
+                # Lockout expired, clear it
+                self.auth_data["rate_limit_locked_until"] = None
+                self.auth_data["rate_limit_attempts"] = []
+                self._save_auth_data()
+
+        # Clean old attempts outside the window
+        cutoff = now - timedelta(seconds=self.RATE_LIMIT_WINDOW)
+        attempts = self.auth_data.get("rate_limit_attempts", [])
+        recent_attempts = [ts for ts in attempts if datetime.fromisoformat(ts) > cutoff]
+
+        # Check if exceeded max attempts
+        if len(recent_attempts) >= self.RATE_LIMIT_MAX_ATTEMPTS:
+            # Trigger lockout
+            lockout_until = now + timedelta(seconds=self.RATE_LIMIT_LOCKOUT_TIME)
+            self.auth_data["rate_limit_locked_until"] = lockout_until.isoformat()
+            self.auth_data["rate_limit_attempts"] = []
+            self._save_auth_data()
+
+            logger = get_logger()
+            if logger:
+                logger.log_exception(
+                    "rate_limit",
+                    f"Rate limit exceeded, locked for {self.RATE_LIMIT_LOCKOUT_TIME}s",
+                )
+
+            return (
+                False,
+                f"Too many attempts. Locked for {self.RATE_LIMIT_LOCKOUT_TIME} seconds.",
+            )
+
+        return True, "OK"
+
+    def _record_login_attempt(self):
+        """Records a login attempt for rate limiting"""
+        now = datetime.now()
+
+        # Clean old attempts
+        cutoff = now - timedelta(seconds=self.RATE_LIMIT_WINDOW)
+        attempts = self.auth_data.get("rate_limit_attempts", [])
+        recent_attempts = [ts for ts in attempts if datetime.fromisoformat(ts) > cutoff]
+
+        # Add new attempt
+        recent_attempts.append(now.isoformat())
+        self.auth_data["rate_limit_attempts"] = recent_attempts
+        self._save_auth_data()
 
     def _hash_password(self, password: str, salt: bytes) -> str:
         """Genera hash de contraseña con SHA-256 y salt"""
@@ -65,8 +145,8 @@ class AuthManager:
         Returns:
             Tuple[bool, str]: (valid, error_message)
         """
-        if len(password) < 8:
-            return False, "Password must be at least 8 characters long"
+        if len(password) < 12:
+            return False, "Password must be at least 12 characters long"
 
         has_uppercase = any(c.isupper() for c in password)
         has_lowercase = any(c.islower() for c in password)
@@ -135,6 +215,14 @@ class AuthManager:
         Returns:
             Tuple[bool, str]: (éxito, mensaje)
         """
+        # Check rate limiting first
+        allowed, message = self._check_rate_limit()
+        if not allowed:
+            return False, message
+
+        # Record this login attempt
+        self._record_login_attempt()
+
         # Verificar si está bloqueado
         if self.auth_data.get("locked", False):
             return (
@@ -157,12 +245,18 @@ class AuthManager:
         # Calcular hash de la contraseña ingresada
         input_hash = self._hash_password(password, salt)
 
-        # Verificar
-        if input_hash == stored_hash:
+        # Verificar (usando compare_digest para evitar timing attacks)
+        if secrets.compare_digest(input_hash, stored_hash):
             # Contraseña correcta
             self.auth_data["failed_attempts"] = 0
             self.auth_data["last_login"] = datetime.now().isoformat()
             self._save_auth_data()
+
+            # Log successful login
+            logger = get_logger()
+            if logger:
+                logger.log_login_success()
+
             return True, "Acceso concedido"
         else:
             # Contraseña incorrecta
@@ -174,9 +268,21 @@ class AuthManager:
                     # Bloquear y marcar para destrucción
                     self.auth_data["locked"] = True
                     self._save_auth_data()
+
+                    # Log account lock
+                    logger = get_logger()
+                    if logger:
+                        logger.log_account_locked()
+
                     return False, "LÍMITE DE INTENTOS EXCEDIDO. Sistema bloqueado."
 
                 self._save_auth_data()
+
+                # Log failed login
+                logger = get_logger()
+                if logger:
+                    logger.log_login_failed(attempts_left)
+
                 return (
                     False,
                     f"Contraseña incorrecta. Intentos restantes: {attempts_left}",
@@ -213,12 +319,25 @@ class AuthManager:
             return False, f"Contraseña actual incorrecta. {message}"
 
         # Establecer nueva contraseña
-        return self.set_password(new_password)
+        result = self.set_password(new_password)
+
+        # Log password change if successful
+        if result[0]:
+            logger = get_logger()
+            if logger:
+                logger.log_password_changed()
+
+        return result
 
     def reset_auth_data(self):
         """Resetea todos los datos de autenticación"""
         self.auth_data = self._create_default_auth_data()
         self._save_auth_data()
+
+        # Log account reset
+        logger = get_logger()
+        if logger:
+            logger.log_account_reset()
 
     def get_attempts_remaining(self) -> int:
         """Retorna intentos restantes antes del bloqueo"""
