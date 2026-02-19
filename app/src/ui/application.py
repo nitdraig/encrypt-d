@@ -513,18 +513,29 @@ This process is safe and automatic."""
         )
         scrollable_frame = ttk.Frame(canvas)
 
+        def _on_canvas_configure(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+            # Center content: canvas window full width and horizontally centered
+            cw = event.width
+            canvas.itemconfig(canvas_window_id, width=cw)
+            canvas.coords(canvas_window_id, (cw // 2, 0))
+
         scrollable_frame.bind(
             "<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
         )
 
-        canvas.create_window((500, 0), window=scrollable_frame, anchor="n")
+        canvas_window_id = canvas.create_window(
+            (0, 0), window=scrollable_frame, anchor="n"
+        )
         canvas.configure(yscrollcommand=scrollbar.set)
+        canvas.bind("<Configure>", _on_canvas_configure)
 
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
+        # Form frame centered within the scroll area
         frame = ttk.Frame(scrollable_frame, padding=30)
-        frame.pack(pady=20)
+        frame.pack(pady=20, anchor="center")
 
         # Title
         ttk.Label(

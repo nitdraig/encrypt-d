@@ -695,7 +695,7 @@ _Encrypt-D is the first product in the Vault line_
 ```
 🔒 ENCRYPT-D
    ─────────
-   by EXCELSO VAULT
+   by EXCELSO OPEN
 ```
 
 ---
