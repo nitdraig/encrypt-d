@@ -2,7 +2,7 @@
 
 > **Military-Grade Security. Human-Level Simplicity.**
 
-**Encrypt-D** is a professional folder encryption manager for Windows, combining AES-256-GCM military-grade encryption with an intuitive interface. Part of **Excelso Vault** - the security division of the Excelso Tech Group.
+**Encrypt-D** is a professional folder encryption manager for Windows, combining AES-256-GCM military-grade encryption with an intuitive interface. Part of **Excelso Open** - the security division of the Excelso Tech Group.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -22,7 +22,7 @@ This motto reflects a client-centered approach and commitment to delivering real
 
 ### Excelso Divisions
 
-- **🔐 Vault**: Security and privacy solutions (Encrypt-D's home)
+- **🔐 Vault**: Security and privacy solutions
 - **🌐 Open**: Open-source initiatives and collaborative projects
 - **🚀 Tech Group**: Innovation-driven technological community
 
@@ -204,14 +204,14 @@ _Alternatives:_
 
 ## 📈 Strategic Value for Excelso
 
-### 🔐 Vault Secure
+### 🔐 Open Secure
 
-_Encrypt-D is the first product in the Vault line_
+_Encrypt-D is a product in the Open line_
 
 **Strategic Benefits:**
 
 1. **Positioning**: Establishes Excelso as a leader in digital security
-2. **Portfolio**: First tangible product in the Vault area
+2. **Portfolio**: First tangible product in the Open area
 3. **Open Source**: Builds trust and community
 4. **Scalable**: Foundation for future products
 
